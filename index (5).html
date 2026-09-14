@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>GyG Medical Solutions · Equipment Advisor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SAVIA Equipment Advisor — shared.css
+   Tokens + primitivos compartidos por index.html y catalog.html
+   Paleta: negro + rojo Fotona ("choose perfection")
+   ============================================================ */
+:root{
+  --void:#0a0a0a;
+  --void-2:#141414;
+  --panel:#161616;
+  --panel-hi:#1c1c1c;
+  --line:rgba(255,255,255,.08);
+  --line-strong:rgba(255,255,255,.18);
+  --accent:#d81f2a;
+  --accent-dim:rgba(216,31,42,.14);
+  --accent-strong:#ff2b38;
+  --ink:#f4f2ef;
+  --muted:#9a958f;
+  --radius-lg:20px;
+  --radius-sm:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:
+    radial-gradient(circle at 14% 6%, rgba(216,31,42,.09), transparent 40%),
+    radial-gradient(circle at 90% 82%, rgba(216,31,42,.05), transparent 45%),
+    var(--void);
+  color:var(--ink);
+  font-family:"Inter",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.display{font-family:"Playfair Display",Georgia,serif; font-weight:600}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+a{color:var(--accent)}
+button, .pill-btn, .chip{-webkit-tap-highlight-color:transparent}
+
+/* faint grid backdrop */
+.opt-grid{
+  position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.5;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:64px 64px;
+  mask-image: radial-gradient(circle at 50% 25%, rgba(0,0,0,.9), transparent 72%);
+}
+
+.shell{max-width:1200px;margin:auto;min-height:100vh;padding:26px;position:relative;z-index:1}
+
+nav.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px;flex-wrap:wrap;gap:12px}
+.brand{font-family:"Playfair Display",Georgia,serif; font-weight:600; letter-spacing:.005em; font-size:16.5px;
+  display:flex; align-items:baseline; gap:9px; flex-wrap:wrap; row-gap:2px}
+.brand .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);display:inline-block;position:relative;top:-8px}
+.brand span.tag{font-family:"Inter",sans-serif; font-weight:400;color:var(--muted);font-size:12.5px;letter-spacing:.01em}
+.nav-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.pill-btn{
+  border:1px solid var(--line-strong); background:rgba(255,255,255,.02); color:var(--ink);
+  border-radius:99px; padding:10px 16px; font-size:13px; cursor:pointer; transition:.18s;
+  font-family:"Inter",sans-serif; min-height:40px; display:inline-flex; align-items:center;
+}
+.pill-btn:hover{border-color:var(--accent); background:var(--accent-dim)}
+.pill-btn.accent{border-color:var(--accent); color:var(--accent-strong)}
+
+/* ---------- Modal ---------- */
+.svm-root{position:fixed;inset:0;z-index:80;display:none}
+.svm-root.open{display:block}
+.svm-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(3px);
+  animation:svmFade .18s ease}
+.svm-sheet{
+  position:relative; max-width:640px; margin:6vh auto; background:var(--panel);
+  border:1px solid var(--line-strong); border-radius:var(--radius-lg);
+  padding:30px 30px 26px; max-height:86vh; overflow-y:auto;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  animation:svmRise .22s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes svmFade{from{opacity:0}to{opacity:1}}
+@keyframes svmRise{from{opacity:0; transform:translateY(14px) scale(.98)}to{opacity:1; transform:none}}
+.svm-close{position:absolute; top:16px; right:16px; background:transparent; border:0; color:var(--muted);
+  font-size:16px; cursor:pointer; width:40px; height:40px; border-radius:8px}
+.svm-close:hover{color:var(--ink); background:rgba(255,255,255,.06)}
+.svm-eyebrow{font-size:12px; color:var(--accent-strong); font-family:"JetBrains Mono",monospace; margin-bottom:6px}
+.svm-sheet h3{font-size:25px; margin:0 0 10px; letter-spacing:-.005em; line-height:1.15}
+.svm-sheet > .svm-head > p{color:var(--muted); line-height:1.6; margin:0 0 22px; font-size:14.5px; font-family:"Inter",sans-serif}
+.svm-tabs{display:flex; gap:0; border-bottom:1px solid var(--line); margin-bottom:20px; overflow-x:auto; -ms-overflow-style:none; scrollbar-width:none}
+.svm-tabs::-webkit-scrollbar{display:none}
+.svm-tab{background:transparent; border:0; color:var(--muted); padding:10px 4px; margin-right:18px;
+  font-size:13.5px; cursor:pointer; border-bottom:2px solid transparent; font-family:"Inter",sans-serif; white-space:nowrap; min-height:40px}
+.svm-tab.active{color:var(--accent-strong); border-color:var(--accent)}
+.svm-spec-list{display:grid; gap:12px; margin:0}
+.svm-spec-list > div{display:flex; justify-content:space-between; gap:16px; padding:10px 0; border-bottom:1px solid var(--line)}
+.svm-spec-list dt{color:var(--muted); font-size:13.5px; font-family:"Inter",sans-serif}
+.svm-spec-list dd{margin:0; font-family:"JetBrains Mono",monospace; font-size:13px; text-align:right}
+.svm-video-wrap{position:relative; padding-top:56.25%; border-radius:var(--radius-sm); overflow:hidden; background:#000}
+.svm-video-wrap iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.svm-photo-wrap{background:#f4f2ef; border-radius:var(--radius-sm); overflow:hidden; margin:-30px -30px 22px; padding:18px}
+.svm-photo{display:block; width:100%; height:210px; object-fit:contain}
+.svm-empty{color:var(--muted); font-size:13.5px; line-height:1.5; font-family:"Inter",sans-serif}
+.svm-empty.small{margin-top:12px; font-size:12px}
+.svm-link{display:inline-block; margin-top:18px; font-size:13px; color:var(--accent-strong); text-decoration:none;
+  border:1px solid var(--line-strong); border-radius:8px; padding:9px 14px}
+.svm-link:hover{border-color:var(--accent)}
+@media(max-width:620px){
+  .svm-sheet{margin:0; max-height:100vh; height:100vh; border-radius:0; padding:24px 20px 26px}
+  .svm-photo-wrap{margin:-24px -20px 20px}
+  .svm-photo{height:170px}
+}
+
+/* ---------- Profile drawer (index) ---------- */
+.drawer-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:70; display:none}
+.drawer-backdrop.open{display:block}
+.drawer{position:fixed; top:0; right:0; height:100%; width:min(380px,92vw); background:var(--panel);
+  border-left:1px solid var(--line-strong); z-index:71; padding:26px; transform:translateX(100%);
+  transition:transform .28s cubic-bezier(.2,.8,.2,1); overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+.drawer h3{margin:0 0 4px; font-size:20px}
+.drawer .sub{color:var(--muted); font-size:13px; margin:0 0 20px; font-family:"Inter",sans-serif}
+.drawer-item{border-bottom:1px solid var(--line); padding:12px 0}
+.drawer-item .k{font-size:11.5px; color:var(--muted); margin-bottom:4px; font-family:"Inter",sans-serif}
+.drawer-item .v{font-size:14px; font-family:"Inter",sans-serif}
+.drawer-item button{margin-top:8px; background:transparent; border:1px solid var(--line-strong); color:var(--accent-strong);
+  border-radius:8px; padding:7px 12px; font-size:12px; cursor:pointer; font-family:"Inter",sans-serif; min-height:34px}
+.drawer-empty{color:var(--muted); font-size:14px; line-height:1.6; font-family:"Inter",sans-serif}
+
+/* ---------- Mobile-wide tweaks ---------- */
+@media(max-width:480px){
+  .shell{padding:18px}
+  nav.topbar{margin-bottom:26px}
+  .brand{font-size:15px}
+  .pill-btn{padding:9px 13px; font-size:12.5px}
+}
+
+</style>
+<style>
+.hero{display:grid; grid-template-columns:1.02fr .98fr; gap:46px; align-items:start}
+.eyebrow{font-size:12.5px; color:var(--accent-strong); font-family:"JetBrains Mono",monospace; letter-spacing:.02em}
+h1.display{font-size:50px; line-height:1.06; letter-spacing:-.01em; margin:16px 0 18px; max-width:600px; font-weight:600}
+.lead{font-size:17px; line-height:1.65; color:var(--muted); max-width:540px; font-family:"Inter",sans-serif}
+.features{display:flex; gap:10px; flex-wrap:wrap; margin-top:28px}
+.feature{padding:9px 13px; background:var(--void-2); border:1px solid var(--line); border-radius:10px; font-size:12.5px; color:var(--muted); font-family:"Inter",sans-serif}
+.feature b{color:var(--ink); font-weight:600}
+
+.card{background:var(--panel); border:1px solid var(--line-strong); border-radius:var(--radius-lg); padding:28px;
+  box-shadow:0 24px 70px rgba(0,0,0,.45); position:relative; overflow:hidden}
+.card::before{content:""; position:absolute; top:-40%; right:-30%; width:60%; height:140%;
+  background:radial-gradient(circle, rgba(216,31,42,.09), transparent 70%); pointer-events:none}
+
+.qmeta{display:flex; justify-content:space-between; font-size:12px; color:var(--muted); font-family:"JetBrains Mono",monospace}
+.progress{height:4px; background:var(--void-2); border-radius:99px; overflow:hidden; margin:16px 0 28px; position:relative}
+.bar{height:100%; background:var(--accent); width:14%; transition:width .35s ease; position:relative}
+.bar::after{content:""; position:absolute; right:-6px; top:-3px; width:10px; height:10px; border-radius:50%;
+  background:var(--accent-strong); box-shadow:0 0 12px 3px var(--accent)}
+
+.qcat{font-size:12px; color:var(--muted); font-family:"JetBrains Mono",monospace; margin-bottom:8px}
+.question{font-size:22px; letter-spacing:-.005em; margin:0 0 20px; font-weight:600; font-family:"Playfair Display",serif}
+.options{display:grid; gap:9px}
+.option{border:1px solid var(--line); padding:14px 16px; border-radius:12px; cursor:pointer; background:var(--void-2);
+  text-align:left; color:var(--ink); font-size:14.5px; font-family:"Inter",sans-serif; transition:.15s; position:relative; min-height:48px}
+.option:hover{border-color:var(--line-strong)}
+.option.selected{border-color:var(--accent); background:var(--accent-dim); color:var(--accent-strong)}
+.actions{display:flex; justify-content:space-between; align-items:center; margin-top:24px}
+.btn{border:0; border-radius:11px; padding:13px 20px; font-weight:600; cursor:pointer; font-family:"Inter",sans-serif; font-size:14px; min-height:46px}
+.primary{background:var(--accent); color:#fff}
+.primary:hover{background:var(--accent-strong)}
+.secondary{background:transparent; color:var(--muted)}
+.secondary:hover{color:var(--ink)}
+
+/* sweep transition */
+.beam-sweep{position:fixed; inset:0; z-index:60; pointer-events:none; opacity:0}
+.beam-sweep.play{animation:beamPlay .68s ease forwards}
+.beam-sweep::before{content:""; position:absolute; top:0; bottom:0; left:-10%; width:14%;
+  background:linear-gradient(90deg, transparent, rgba(216,31,42,.55), transparent);
+  filter:blur(4px);}
+.beam-sweep.play::before{animation:beamMove .68s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes beamPlay{0%{opacity:1}85%{opacity:1}100%{opacity:0}}
+@keyframes beamMove{from{left:-14%}to{left:100%}}
+
+.results{display:none}
+.result-banner{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px;
+  padding:11px 14px; border:1px solid var(--line); background:var(--void-2); border-radius:12px; font-size:13px; color:var(--muted); font-family:"Inter",sans-serif}
+.result-banner button{background:transparent; border:1px solid var(--line-strong); color:var(--accent-strong); border-radius:8px;
+  padding:7px 11px; font-size:12.5px; cursor:pointer; font-family:"Inter",sans-serif; white-space:nowrap; min-height:36px}
+.result-head h2{font-size:28px; margin:4px 0 6px; font-family:"Playfair Display",serif}
+.result-sub{color:var(--muted); font-size:14.5px; line-height:1.55; margin:0 0 22px; font-family:"Inter",sans-serif}
+
+.machine-top{
+  border:1px solid rgba(216,31,42,.4); background:linear-gradient(135deg, rgba(216,31,42,.08), transparent 60%), var(--void-2);
+  border-radius:18px; padding:22px; margin-bottom:12px; cursor:pointer; transition:.18s;
+}
+.machine-top:hover{border-color:var(--accent)}
+.machine-top .tier-label{font-size:11.5px; color:var(--accent-strong); font-family:"JetBrains Mono",monospace; margin-bottom:6px}
+.machine-top h3{margin:2px 0 8px; font-size:20px; font-family:"Playfair Display",serif}
+.machine-top p{margin:0; color:var(--muted); line-height:1.55; font-size:14px; max-width:420px; font-family:"Inter",sans-serif}
+.machine-row-top{display:flex; justify-content:space-between; gap:16px; align-items:flex-start}
+.machine-top-img{width:84px; height:84px; flex:0 0 auto; background:#f4f2ef; border-radius:12px; padding:8px; margin-right:14px}
+.machine-top-img img{display:block; width:100%; height:100%; object-fit:contain}
+.machine-row-top-inner{display:flex; align-items:flex-start}
+.score-big{font-size:26px; font-weight:700; color:var(--accent-strong); font-family:"JetBrains Mono",monospace; white-space:nowrap}
+
+.machine-alt{display:flex; justify-content:space-between; align-items:center; gap:16px;
+  border:1px solid var(--line); border-radius:13px; padding:14px 16px; margin-bottom:9px; cursor:pointer; transition:.15s; background:var(--void-2)}
+.machine-alt:hover{border-color:var(--line-strong)}
+.alt-left{display:flex; align-items:center; gap:12px; min-width:0}
+.machine-alt-img{width:44px; height:44px; flex:0 0 auto; background:#f4f2ef; border-radius:9px; padding:5px}
+.machine-alt-img img{display:block; width:100%; height:100%; object-fit:contain}
+.machine-alt .alt-name{font-size:15px; font-weight:600; font-family:"Inter",sans-serif}
+.machine-alt .alt-desc{color:var(--muted); font-size:12.5px; margin-top:2px; max-width:300px; font-family:"Inter",sans-serif}
+.machine-alt .score-sm{font-family:"JetBrains Mono",monospace; color:var(--accent-strong); font-size:15px; white-space:nowrap}
+
+.tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:12px}
+.tag{font-size:11px; padding:5px 8px; border-radius:7px; background:rgba(255,255,255,.04); color:var(--muted); border:1px solid var(--line); font-family:"Inter",sans-serif}
+
+.disclaimer{font-size:11px; color:var(--muted); margin-top:20px; line-height:1.5; opacity:.75; font-family:"Inter",sans-serif}
+.restart-row{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap}
+
+@media(max-width:860px){.hero{grid-template-columns:1fr}h1.display{font-size:36px}.shell{padding:20px}}
+@media(max-width:480px){
+  .card{padding:20px}
+  .question{font-size:19px}
+  .actions{flex-direction:column-reverse; align-items:stretch; gap:10px}
+  .actions .btn{width:100%}
+  .restart-row{flex-direction:column}
+  .restart-row .btn{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="opt-grid"></div>
+<div class="beam-sweep" id="beamSweep"></div>
+
+<div class="shell">
+  <nav class="topbar">
+    <div class="brand"><span class="dot"></span>GyG Medical Solutions<span class="tag">equipment advisor</span></div>
+    <div class="nav-actions">
+      <button class="pill-btn" id="openDrawerBtn">Mi perfil</button>
+      <a class="pill-btn" href="catalog.html">Ver catálogo completo</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Inteligencia comercial · tecnología médico-estética</div>
+      <h1 class="display">Encuentra el equipo correcto para tu clínica.</h1>
+      <p class="lead">Cuéntanos qué quieres ofrecer, cómo opera tu clínica y cuál es tu rango de inversión. GyG Medical Solutions compara tu perfil con el portafolio Fotona y prioriza los equipos con mayor encaje comercial.</p>
+      <div class="features">
+        <div class="feature"><b>7</b> preguntas</div>
+        <div class="feature">Shortlist con <b>especificaciones y video</b></div>
+        <div class="feature">Perfil <b>editable</b> en cualquier momento</div>
+        <div class="feature">Explorar <b>catálogo</b> después</div>
+      </div>
+    </div>
+
+    <div class="card" id="advisor">
+      <div id="quiz">
+        <div class="qmeta"><span id="stepLabel">Pregunta 1 de 7</span><span>≈ 60 segundos</span></div>
+        <div class="progress"><div class="bar" id="bar"></div></div>
+        <div class="qcat" id="category">Objetivo clínico</div>
+        <div class="question" id="question"></div>
+        <div class="options" id="options"></div>
+        <div class="actions">
+          <button class="btn secondary" id="back">Atrás</button>
+          <button class="btn primary" id="next">Continuar</button>
+        </div>
+      </div>
+
+      <div class="results" id="results">
+        <div class="result-banner" id="resumeBanner" style="display:none">
+          <span>Estamos usando tu perfil guardado anteriormente.</span>
+          <button id="editFromBanner">Editar respuestas</button>
+        </div>
+        <div class="result-head">
+          <div class="eyebrow">Perfil analizado</div>
+          <h2>Tu shortlist inicial</h2>
+        </div>
+        <p class="result-sub">Estas son las opciones con mayor encaje según tus objetivos, presupuesto, pacientes y estrategia comercial. Toca cualquier equipo para ver especificaciones, video y renders.</p>
+        <div id="machines"></div>
+        <div class="restart-row">
+          <button class="btn primary" onclick="editAnswers()">Ajustar respuestas</button>
+          <button class="btn secondary" onclick="fullRestart()">Empezar de nuevo</button>
+        </div>
+        <div class="disclaimer">Prototipo conceptual. Precios, tiempos de sesión y huella en piso mostrados aquí son de referencia y deben confirmarse contra la ficha técnica y condiciones comerciales vigentes del distribuidor antes de uso comercial.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Profile drawer -->
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<div class="drawer" id="drawer">
+  <h3>Mi perfil</h3>
+  <p class="sub">Tus respuestas actuales. Edita cualquiera para recalcular la shortlist.</p>
+  <div id="drawerBody"></div>
+</div>
+
+<script>
+/* ============================================================
+   SAVIA Equipment Advisor — shared.js
+   Catálogo Fotona, marcas adicionales del portafolio,
+   persistencia de perfil (localStorage) y modal de especificaciones.
+   Cargado por index.html y catalog.html.
+   ============================================================ */
+
+const SAVIA_STORAGE_KEY = "savia_advisor_profile_v1";
+
+/* ---------- Catálogo Fotona ---------- */
+/* Specs de referencia a partir de información pública de Fotona;
+   confirmar cifras exactas contra la ficha técnica vigente del
+   distribuidor antes de uso comercial. */
+const CATALOG = [
+  {
+    id: "dynamis-max",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-dynamis-max.png&w=3840&q=75",
+    name: "Dynamis® Max",
+    category: "Plataforma láser",
+    destacado: true,
+    tier: "premium",
+    price: 5,
+    priceLabel: "Más de US$120K",
+    tags: ["Rejuvenecimiento facial","Tensado corporal / remodelación","Acné y cicatrices","Lesiones pigmentadas","Salud íntima / ginecología","Quiero ampliar varias áreas"],
+    type: ["Versátil: varias indicaciones","Plataforma premium para diferenciar la clínica"],
+    desc: "Plataforma integral para estética y dermatología que combina múltiples opciones de tratamiento en un solo sistema.",
+    long: "La generación más reciente de la línea Dynamis, con más de 100 opciones de tratamiento preestablecidas para rostro y cuerpo. Combina Nd:YAG y Er:YAG con enfriamiento cutáneo DMC™ y monitoreo térmico MatrixView®, pensada para clínicas que quieren un único sistema capaz de sostener un menú de tratamientos amplio y de alto valor.",
+    specs: [["Longitudes de onda","Nd:YAG 1064nm · Er:YAG 2940nm"],["Modalidad","TwinLight®, más de 100 protocolos preestablecidos"],["Indicaciones típicas","Rejuvenecimiento facial y corporal, vascular, íntima"],["Tiempo por sesión","20 – 45 min"],["Huella en piso","0.6 × 0.6 m"]],
+    video: null
+  },
+  {
+    id: "sp-dynamis-pro",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-sp-dynamis-pro.jpg&w=3840&q=75",
+    name: "SP Dynamis PRO®",
+    category: "Plataforma láser",
+    destacado: true,
+    tier: "premium",
+    price: 4,
+    priceLabel: "US$70K – 120K",
+    tags: ["Rejuvenecimiento facial","Tensado corporal / remodelación","Acné y cicatrices","Salud íntima / ginecología","Quiero ampliar varias áreas"],
+    type: ["Versátil: varias indicaciones","Plataforma premium para diferenciar la clínica"],
+    desc: "Plataforma láser premium de última generación con longitudes de onda Er:YAG y Nd:YAG.",
+    long: "Evolución de la premiada línea SP Dynamis, con interfaz táctil y configuraciones de memoria personalizables. La combinación Nd:YAG + Er:YAG permite alcanzar distintas profundidades de piel sin cambiar de equipo, cubriendo estética, dermatología y aplicaciones ginecológicas.",
+    specs: [["Longitudes de onda","Nd:YAG 1064nm · Er:YAG 2940nm"],["Modalidad","Sistema dual táctil, memorias personalizables"],["Indicaciones típicas","Facial, corporal, vascular, íntima"],["Tiempo por sesión","20 – 40 min"],["Huella en piso","0.6 × 0.6 m"]],
+    video: "7K7X7AlPLRQ"
+  },
+  {
+    id: "sp-spectro",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-sp-spectro.jpg&w=3840&q=75",
+    name: "SP Spectro®",
+    category: "Plataforma láser",
+    destacado: false,
+    tier: "versatile",
+    price: 3,
+    priceLabel: "US$40K – 70K",
+    tags: ["Rejuvenecimiento facial","Acné y cicatrices","Tensado corporal / remodelación"],
+    type: ["Versátil: varias indicaciones"],
+    desc: "Sistema compacto y versátil Er:YAG + Nd:YAG para tratamientos estéticos y dermatológicos.",
+    long: "Una versión de entrada más compacta de la arquitectura dual de Fotona, pensada para clínicas que quieren cubrir varias indicaciones estéticas y dermatológicas comunes sin el nivel de inversión de las plataformas premium.",
+    specs: [["Longitudes de onda","Nd:YAG 1064nm · Er:YAG 2940nm"],["Modalidad","Sistema dual compacto"],["Indicaciones típicas","Rejuvenecimiento, acné, textura de piel"],["Tiempo por sesión","15 – 35 min"],["Huella en piso","0.5 × 0.5 m"]],
+    video: null
+  },
+  {
+    id: "xp-dynamis",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-xp-dynamis.jpg&w=3840&q=75",
+    name: "XP Dynamis®",
+    category: "Plataforma láser",
+    destacado: false,
+    tier: "specialist",
+    price: 3,
+    priceLabel: "US$40K – 70K",
+    tags: ["Depilación","Tensado corporal / remodelación","Acné y cicatrices"],
+    type: ["Especialista: excelente en una indicación","Versátil: varias indicaciones"],
+    desc: "Plataforma estética y quirúrgica Nd:YAG de 80 W para tratamientos rápidos y precisos.",
+    long: "Línea Nd:YAG de pulso largo de alto rendimiento pensada para velocidad: tratamientos estéticos rápidos y de alta calidad, además de aplicaciones quirúrgicas Nd:YAG QCW. Encaja con clínicas de alto volumen que priorizan tiempos de sesión cortos.",
+    specs: [["Longitudes de onda","Nd:YAG 1064nm"],["Modalidad","Pulso largo no ablativo + QCW quirúrgico"],["Indicaciones típicas","Depilación, vascular, remodelación"],["Tiempo por sesión","10 – 25 min"],["Huella en piso","0.5 × 0.5 m"]],
+    video: null
+  },
+  {
+    id: "xs-dynamis",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-xs-dynamis.jpg&w=3840&q=75",
+    name: "XS Dynamis®",
+    category: "Plataforma láser",
+    destacado: false,
+    tier: "specialist",
+    price: 2,
+    priceLabel: "US$20K – 40K",
+    tags: ["Rejuvenecimiento facial","Acné y cicatrices"],
+    type: ["Especialista: excelente en una indicación"],
+    desc: "Rejuvenecimiento cutáneo avanzado con Er:YAG de tercera generación y tecnología SMOOTH®.",
+    long: "Plataforma enfocada en resurfacing con Er:YAG: la longitud de onda se absorbe selectivamente en el agua de la piel, permitiendo ablación precisa capa por capa. La tecnología SMOOTH® suma modos no ablativos para reducir el tiempo de recuperación.",
+    specs: [["Longitudes de onda","Er:YAG 2940nm"],["Modalidad","SMOOTH®, ablativo y no ablativo"],["Indicaciones típicas","Resurfacing, cicatrices, textura de piel"],["Tiempo por sesión","15 – 30 min"],["Huella en piso","0.45 × 0.45 m"]],
+    video: null
+  },
+  {
+    id: "starwalker-maqx-pro",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-starwalker-maqx.png&w=3840&q=75",
+    name: "StarWalker® MaQX Pro",
+    category: "Láser fotoacústico",
+    destacado: true,
+    tier: "premium",
+    price: 4,
+    priceLabel: "US$70K – 120K",
+    tags: ["Lesiones pigmentadas","Remoción de tatuajes","Acné y cicatrices"],
+    type: ["Especialista: excelente en una indicación","Plataforma premium para diferenciar la clínica"],
+    desc: "El sistema fotoacústico de ultra alto rendimiento más avanzado del mercado.",
+    long: "Q-switched de máxima potencia con múltiples longitudes de onda para pigmento y remoción de tatuajes. Es la referencia cuando el objetivo comercial es dominar una indicación dermatológica específica con el equipo de mayor rendimiento disponible.",
+    specs: [["Longitudes de onda","1064nm · 532nm · 585nm · 650nm"],["Modalidad","Q-switched fotoacústico / PQX"],["Indicaciones típicas","Pigmento, tatuaje, acné activo"],["Tiempo por sesión","10 – 25 min"],["Huella en piso","0.5 × 0.5 m"]],
+    video: "UcuT6TACuZE"
+  },
+  {
+    id: "starwalker-pico-pro",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-starwalker-pico.png&w=3840&q=75",
+    name: "StarWalker® PICO Pro",
+    category: "Láser picosegundo",
+    destacado: false,
+    tier: "specialist",
+    price: 4,
+    priceLabel: "US$70K – 120K",
+    tags: ["Lesiones pigmentadas","Remoción de tatuajes"],
+    type: ["Especialista: excelente en una indicación"],
+    desc: "La máxima evolución en tecnología láser de picosegundos.",
+    long: "Pulsos de picosegundo de altísima potencia pico para pigmento y tatuaje, con el tiempo de pulso más corto de la familia StarWalker. Pensado para clínicas de dermatología estética que compiten en resultados de pigmento de alta gama.",
+    specs: [["Longitudes de onda","1064nm · 532nm"],["Modalidad","Picosegundo (PQX)"],["Indicaciones típicas","Pigmento, tatuaje, rejuvenecimiento no ablativo"],["Tiempo por sesión","10 – 20 min"],["Huella en piso","0.5 × 0.5 m"]],
+    video: null
+  },
+  {
+    id: "lightwalker-ii",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-lightwalker-ii.jpeg&w=3840&q=75",
+    name: "LightWalker® II",
+    category: "Láser dental",
+    destacado: false,
+    tier: "specialist",
+    price: 3,
+    priceLabel: "US$40K – 70K",
+    tags: ["Odontología láser"],
+    type: ["Especialista: excelente en una indicación","Versátil: varias indicaciones"],
+    desc: "La plataforma láser odontológica más completa disponible actualmente.",
+    long: "Sistema dental dual-wavelength (Er:YAG + Nd:YAG) de 20 W, con 5 duraciones de pulso y 4 modalidades especiales. Cubre más de 80 aplicaciones clínicas, desde preparación de cavidades hasta cirugía de tejido blando, con protocolos preconfigurados en pantalla táctil.",
+    specs: [["Longitudes de onda","Er:YAG 2940nm · Nd:YAG 1064nm"],["Potencia","20 W"],["Indicaciones típicas","Cavidades, endodoncia, cirugía de tejido blando"],["Tiempo por sesión","Variable según procedimiento"],["Huella en piso","0.4 × 0.4 m"]],
+    video: "CpdWtNHFCr8"
+  },
+  {
+    id: "starformer-tightwave",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-starformer-tightwave.png&w=3840&q=75",
+    name: "StarFormer® TightWave®",
+    category: "Remodelación corporal",
+    destacado: false,
+    tier: "specialist",
+    price: 3,
+    priceLabel: "US$40K – 70K",
+    tags: ["Tensado corporal / remodelación"],
+    type: ["Especialista: excelente en una indicación"],
+    desc: "Fortalecimiento muscular y remodelación corporal con pulsos magnéticos de alta intensidad.",
+    long: "A diferencia del resto del portafolio, no es un láser: usa pulsos electromagnéticos de alta intensidad para contracción muscular supramáxima. Encaja como línea complementaria en clínicas que quieren sumar remodelación corporal no invasiva a su oferta.",
+    specs: [["Tecnología","Pulsos electromagnéticos de alta intensidad"],["Modalidad","Protocolos por zona corporal"],["Indicaciones típicas","Tonificación abdominal, glútea, remodelación"],["Tiempo por sesión","20 – 30 min"],["Huella en piso","0.5 × 0.5 m"]],
+    video: null
+  },
+  {
+    id: "timewalker-fotona4d",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-timewalker-4d.jpg&w=3840&q=75",
+    name: "TimeWalker® II Fotona4D®",
+    category: "Rejuvenecimiento facial",
+    destacado: true,
+    tier: "premium",
+    price: 4,
+    priceLabel: "US$70K – 120K",
+    tags: ["Rejuvenecimiento facial"],
+    type: ["Plataforma premium para diferenciar la clínica","Versátil: varias indicaciones"],
+    desc: "El célebre lifting láser sin cirugía: Fotona4D®, SmoothEye®, LipLase® y VectorLift®.",
+    long: "Diseñado específicamente para el protocolo facial de cuatro pasos Fotona4D®. Es la apuesta cuando el posicionamiento de la clínica es rejuvenecimiento no invasivo de alto ticket: menor volumen, mayor margen por sesión.",
+    specs: [["Longitudes de onda","Er:YAG 2940nm · Nd:YAG 1064nm"],["Modalidad","Protocolo Fotona4D® en 4 pasos"],["Indicaciones típicas","Lifting facial no invasivo, SmoothEye®, LipLase®"],["Tiempo por sesión","30 – 50 min"],["Huella en piso","0.6 × 0.6 m"]],
+    video: "uCaIt1m_V9U"
+  },
+  {
+    id: "timewalker-intimalaser",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-timewalker-intimalaser.jpg&w=3840&q=75",
+    name: "TimeWalker® II IntimaLaser®",
+    category: "Ginecología láser",
+    destacado: false,
+    tier: "specialist",
+    price: 3,
+    priceLabel: "US$40K – 70K",
+    tags: ["Salud íntima / ginecología"],
+    type: ["Especialista: excelente en una indicación"],
+    desc: "Plataforma láser especializada en ginecología funcional y estética.",
+    long: "Basado en la misma arquitectura dual Er:YAG/Nd:YAG de TimeWalker, orientado a salud íntima femenina: tonificación vaginal, síntomas de la menopausia y aplicaciones estéticas ginecológicas. Es la opción cuando la clínica quiere abrir esta línea de ingresos de forma especializada.",
+    specs: [["Longitudes de onda","Er:YAG 2940nm · Nd:YAG 1064nm"],["Modalidad","IntimaLaser®, no ablativo"],["Indicaciones típicas","Tonificación vaginal, salud íntima funcional"],["Tiempo por sesión","15 – 25 min"],["Huella en piso","0.5 × 0.5 m"]],
+    video: null
+  },
+  {
+    id: "timewalker-nightlase",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-timewalker-nightlase.png&w=3840&q=75",
+    name: "TimeWalker® II NightLase®",
+    category: "Medicina del sueño",
+    destacado: false,
+    tier: "specialist",
+    price: 2,
+    priceLabel: "US$20K – 40K",
+    tags: ["Roncopatía y sueño"],
+    type: ["Especialista: excelente en una indicación"],
+    desc: "Tratamiento láser no invasivo del ronquido y la apnea leve del sueño.",
+    long: "Protocolo Er:YAG no ablativo que tensa suavemente el tejido del paladar blando para reducir el ronquido y la apnea leve, sin cirugía ni anestesia. Una línea de ingresos poco explotada para clínicas que ya atienden pacientes de otorrinolaringología o medicina del sueño.",
+    specs: [["Longitudes de onda","Er:YAG 2940nm"],["Modalidad","NightLase®, no ablativo"],["Indicaciones típicas","Ronquido, apnea leve del sueño"],["Tiempo por sesión","15 – 20 min"],["Huella en piso","0.45 × 0.45 m"]],
+    video: null
+  },
+  {
+    id: "skypulse",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-skypulse.jpg&w=3840&q=75",
+    name: "SkyPulse®",
+    category: "Láser dental",
+    destacado: false,
+    tier: "specialist",
+    price: 2,
+    priceLabel: "US$20K – 40K",
+    tags: ["Odontología láser"],
+    type: ["Especialista: excelente en una indicación"],
+    desc: "Plataforma láser odontológica compacta y portátil con tecnología fotoacústica.",
+    long: "Versión compacta y portátil de la tecnología dental de Fotona. Ideal para consultorios pequeños o profesionales que atienden en más de una ubicación y necesitan un equipo fácil de trasladar.",
+    specs: [["Longitudes de onda","Er:YAG 2940nm"],["Modalidad","Fotoacústica, portátil"],["Indicaciones típicas","Procedimientos dentales generales"],["Tiempo por sesión","Variable según procedimiento"],["Huella en piso","Portátil / sobremesa"]],
+    video: null
+  },
+  {
+    id: "skywave",
+    image: "https://www.gygmedicalsolutions.com/_next/image?url=%2Fimages%2Fequipment%2Ffotona-skywave.jpg&w=3840&q=75",
+    name: "SkyWave®",
+    category: "Láser estético",
+    destacado: false,
+    tier: "versatile",
+    price: 2,
+    priceLabel: "US$20K – 40K",
+    tags: ["Rejuvenecimiento facial","Acné y cicatrices"],
+    type: ["Versátil: varias indicaciones"],
+    desc: "Sistema láser de erbio práctico y versátil con tecnología híbrida SuperSMOOTH™.",
+    long: "Plataforma de entrada dentro de la familia Er:YAG, con tecnología híbrida SuperSMOOTH™ que combina modos ablativos y no ablativos. Pensada para clínicas que arrancan su primera línea de rejuvenecimiento facial con láser.",
+    specs: [["Longitudes de onda","Er:YAG 2940nm"],["Modalidad","SuperSMOOTH™ híbrido"],["Indicaciones típicas","Rejuvenecimiento facial, textura de piel"],["Tiempo por sesión","15 – 30 min"],["Huella en piso","0.45 × 0.45 m"]],
+    video: null
+  }
+];
+
+/* ---------- Otras marcas del portafolio (GYG Medical Solutions) ---------- */
+/* Solo enlaces de referencia — no tienen ficha de producto individual en este asesor. */
+const BRANDS = [
+  { name:"Fotona", origin:"Eslovenia / EE. UU.", tagline:"El líder mundial en láser médico y estético", url:"https://www.gygmedicalsolutions.com/marcas/fotona" },
+  { name:"Cynosure Lutronic", origin:"Estados Unidos / Corea", tagline:"Tecnología estética de clase mundial", url:"https://www.gygmedicalsolutions.com/marcas/cynosure-lutronic" },
+  { name:"LifeViz by Quartier Latin", origin:"Francia", tagline:"Fotografía estética 3D de precisión clínica", url:"https://www.gygmedicalsolutions.com/marcas/lifeviz-quartier-latin" },
+  { name:"BioScience", origin:"Alemania", tagline:"Rellenos dérmicos de nueva generación", url:"https://www.gygmedicalsolutions.com/marcas/bioscience" },
+  { name:"Storz Medical", origin:"Suiza", tagline:"Ondas de choque de precisión suiza", url:"https://www.gygmedicalsolutions.com/marcas/storz-medical" },
+  { name:"Hironic", origin:"Corea del Sur", tagline:"HIFU y radiofrecuencia en una sola plataforma", url:"https://www.gygmedicalsolutions.com/marcas/hironic" },
+  { name:"Leaseir", origin:"Israel", tagline:"La opción inteligente para depilación láser", url:"https://www.gygmedicalsolutions.com/marcas/leaseir" },
+  { name:"Eunsung Global", origin:"Corea del Sur", tagline:"Innovación coreana en estética corporal y facial", url:"https://www.gygmedicalsolutions.com/marcas/eunsung" }
+];
+
+/* ---------- Persistencia de perfil ---------- */
+function saveProfile(answers, meta){
+  try{
+    const payload = { answers, meta: meta||{}, savedAt: new Date().toISOString() };
+    localStorage.setItem(SAVIA_STORAGE_KEY, JSON.stringify(payload));
+    return true;
+  }catch(e){ console.warn("No se pudo guardar el perfil:", e); return false; }
+}
+function loadProfile(){
+  try{
+    const raw = localStorage.getItem(SAVIA_STORAGE_KEY);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  }catch(e){ return null; }
+}
+function clearProfile(){
+  try{ localStorage.removeItem(SAVIA_STORAGE_KEY); }catch(e){}
+}
+
+/* ---------- Modal de especificaciones (compartido) ---------- */
+function ensureModalMounted(){
+  if(document.getElementById("saviaModalRoot")) return;
+  const root = document.createElement("div");
+  root.id = "saviaModalRoot";
+  root.className = "svm-root";
+  root.innerHTML = `
+    <div class="svm-backdrop" id="svmBackdrop"></div>
+    <div class="svm-sheet" id="svmSheet" role="dialog" aria-modal="true">
+      <button class="svm-close" id="svmClose" aria-label="Cerrar">✕</button>
+      <div class="svm-photo-wrap" id="svmPhotoWrap"><img id="svmPhoto" class="svm-photo" alt=""></div>
+      <div class="svm-head">
+        <div class="svm-eyebrow" id="svmEyebrow"></div>
+        <h3 id="svmTitle"></h3>
+        <p id="svmDesc"></p>
+      </div>
+      <div class="svm-tabs" id="svmTabs">
+        <button class="svm-tab active" data-tab="specs">Especificaciones</button>
+        <button class="svm-tab" data-tab="video">Video</button>
+      </div>
+      <div class="svm-panel" id="svmPanelSpecs"></div>
+      <div class="svm-panel" id="svmPanelVideo" style="display:none"></div>
+    </div>`;
+  document.body.appendChild(root);
+
+  document.getElementById("svmBackdrop").onclick = closeMachineModal;
+  document.getElementById("svmClose").onclick = closeMachineModal;
+  document.querySelectorAll(".svm-tab").forEach(t=>{
+    t.onclick = ()=>{
+      document.querySelectorAll(".svm-tab").forEach(x=>x.classList.remove("active"));
+      t.classList.add("active");
+      ["specs","video"].forEach(k=>{
+        document.getElementById("svmPanel"+k[0].toUpperCase()+k.slice(1)).style.display = (k===t.dataset.tab)?"block":"none";
+      });
+    };
+  });
+  document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeMachineModal(); });
+}
+
+function openMachineModal(id){
+  ensureModalMounted();
+  const m = CATALOG.find(x=>x.id===id);
+  if(!m) return;
+  document.getElementById("svmEyebrow").textContent = `${m.category} · ${m.priceLabel}`;
+  document.getElementById("svmTitle").textContent = m.name;
+  document.getElementById("svmDesc").textContent = m.long;
+
+  const photoWrap = document.getElementById("svmPhotoWrap");
+  const photo = document.getElementById("svmPhoto");
+  if(m.image){
+    photo.src = m.image; photo.alt = m.name;
+    photoWrap.style.display = "block";
+    photo.onerror = ()=>{ photoWrap.style.display = "none"; };
+  } else {
+    photoWrap.style.display = "none";
+  }
+
+  document.getElementById("svmPanelSpecs").innerHTML =
+    `<dl class="svm-spec-list">` +
+    m.specs.map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join("") +
+    `</dl>`;
+
+  const videoPanel = document.getElementById("svmPanelVideo");
+  videoPanel.innerHTML = m.video
+    ? `<div class="svm-video-wrap"><iframe src="https://www.youtube.com/embed/${m.video}" title="${m.name}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
+    : `<p class="svm-empty">Todavía no hay video asignado a este equipo en el asesor. Se agregará junto con el resto de material audiovisual del distribuidor.</p>`;
+
+  document.querySelectorAll(".svm-tab").forEach(x=>x.classList.remove("active"));
+  document.querySelector('.svm-tab[data-tab="specs"]').classList.add("active");
+  document.getElementById("svmPanelSpecs").style.display="block";
+  document.getElementById("svmPanelVideo").style.display="none";
+
+  document.getElementById("saviaModalRoot").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeMachineModal(){
+  const root = document.getElementById("saviaModalRoot");
+  if(root) root.classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+</script>
+<script>
+const questions=[
+ {cat:"Objetivo clínico",q:"¿Qué tratamientos quieres impulsar principalmente?",multi:true,o:["Rejuvenecimiento facial","Tensado corporal / remodelación","Acné y cicatrices","Lesiones pigmentadas","Remoción de tatuajes","Salud íntima / ginecología","Depilación","Roncopatía y sueño","Odontología láser","Quiero ampliar varias áreas"]},
+ {cat:"Inversión",q:"¿Cuál es tu rango aproximado de inversión?",o:["Hasta US$20K","US$20K–40K","US$40K–70K","US$70K–120K","Más de US$120K","Prefiero evaluar por cuota mensual"]},
+ {cat:"Modelo financiero",q:"¿Qué pesa más en tu decisión?",o:["Menor inversión inicial","Recuperar inversión rápido","Mayor margen por tratamiento","Financiamiento / cuota manejable","La mejor tecnología aunque requiera mayor inversión"]},
+ {cat:"Tu clínica",q:"¿Cómo describirías tu operación actual?",o:["Estoy abriendo una clínica","Consultorio pequeño / boutique","Clínica estética establecida","Centro médico multidisciplinario","Hospital / centro de alto volumen"]},
+ {cat:"Demanda",q:"¿Cuántos tratamientos con el nuevo equipo proyectas al mes?",o:["Menos de 15","15–30","31–60","61–100","Más de 100","Todavía no lo sé"]},
+ {cat:"Portafolio",q:"¿Qué tipo de equipo te conviene más?",o:["Especialista: excelente en una indicación","Versátil: varias indicaciones","Plataforma premium para diferenciar la clínica","No lo sé; recomiéndame"]},
+ {cat:"Prioridad",q:"¿Cuál sería un resultado exitoso en los próximos 12 meses?",o:["Agregar una nueva línea de ingresos","Aumentar ticket promedio","Captar más pacientes","Diferenciarme de competidores","Reemplazar tecnología existente","Expandir el menú de tratamientos"]}
+];
+
+let step=0, answers=Array(questions.length).fill(null);
+const qEl=document.getElementById("question"), optsEl=document.getElementById("options");
+
+function render(){
+  document.getElementById("quiz").style.display="block";
+  document.getElementById("results").style.display="none";
+  let x=questions[step];
+  document.getElementById("stepLabel").textContent=`Pregunta ${step+1} de ${questions.length}`;
+  document.getElementById("bar").style.width=`${((step+1)/questions.length)*100}%`;
+  document.getElementById("category").textContent=x.cat;
+  qEl.textContent=x.q; optsEl.innerHTML="";
+  x.o.forEach(v=>{
+    let b=document.createElement("button"); b.className="option";
+    let a=answers[step];
+    if((Array.isArray(a)&&a.includes(v))||a===v) b.classList.add("selected");
+    b.textContent=v;
+    b.onclick=()=>{
+      if(x.multi){
+        let arr=Array.isArray(answers[step])?[...answers[step]]:[];
+        arr.includes(v) ? arr=arr.filter(z=>z!==v) : arr.push(v);
+        answers[step]=arr;
+      } else answers[step]=v;
+      render();
+    };
+    optsEl.appendChild(b);
+  });
+  document.getElementById("back").style.visibility = step ? "visible" : "hidden";
+  document.getElementById("next").textContent = step===questions.length-1 ? "Ver recomendaciones" : "Continuar";
+}
+
+document.getElementById("back").onclick=()=>{ if(step){ step--; render(); } };
+document.getElementById("next").onclick=()=>{
+  if(!answers[step] || (Array.isArray(answers[step]) && !answers[step].length)){
+    alert("Selecciona una opción para continuar."); return;
+  }
+  if(step<questions.length-1){ step++; render(); } else playSweepThen(recommend);
+};
+
+function playSweepThen(cb){
+  const el=document.getElementById("beamSweep");
+  el.classList.remove("play"); void el.offsetWidth; el.classList.add("play");
+  setTimeout(cb, 260);
+}
+
+function recommend(){
+  const treatments = Array.isArray(answers[0]) ? answers[0] : [answers[0]];
+  const pref = answers[5];
+  const budget = answers[1];
+  const bmap={"Hasta US$20K":1,"US$20K–40K":2,"US$40K–70K":3,"US$70K–120K":4,"Más de US$120K":5,"Prefiero evaluar por cuota mensual":3};
+  const b = bmap[budget];
+
+  const ranked = CATALOG.map(m=>{
+    let s=45;
+    treatments.forEach(t=>{ if(m.tags.includes(t)) s+=12; });
+    if(m.type.includes(pref) || pref==="No lo sé; recomiéndame") s+=12;
+    if(m.price<=b) s+=10; else s-=8*(m.price-b);
+    if(answers[2]==="La mejor tecnología aunque requiera mayor inversión" && m.price>=4) s+=8;
+    if(answers[6]==="Diferenciarme de competidores" && m.type.includes("Plataforma premium para diferenciar la clínica")) s+=8;
+    return {...m, score:Math.max(55, Math.min(98, s))};
+  }).sort((a,b)=>b.score-a.score).slice(0,3);
+
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("results").style.display="block";
+  document.getElementById("resumeBanner").style.display="none";
+
+  const [top, ...rest] = ranked;
+  document.getElementById("machines").innerHTML =
+    `<div class="machine-top" onclick="openMachineModal('${top.id}')">
+      <div class="machine-row-top">
+        <div class="machine-row-top-inner">
+          ${top.image ? `<div class="machine-top-img"><img src="${top.image}" alt="${top.name}" loading="lazy" onerror="this.closest('.machine-top-img').style.display='none'"></div>` : ``}
+          <div>
+            <div class="tier-label">Mejor encaje · ${top.category}</div>
+            <h3>${top.name}</h3>
+            <p>${top.desc}</p>
+          </div>
+        </div>
+        <div class="score-big">${top.score}%</div>
+      </div>
+      <div class="tags">${top.tags.filter(t=>treatments.includes(t)).map(t=>`<span class="tag">${t}</span>`).join("")}<span class="tag">${budget}</span></div>
+    </div>` +
+    rest.map((m)=>`
+      <div class="machine-alt" onclick="openMachineModal('${m.id}')">
+        <div class="alt-left">
+          ${m.image ? `<div class="machine-alt-img"><img src="${m.image}" alt="${m.name}" loading="lazy" onerror="this.closest('.machine-alt-img').style.display='none'"></div>` : ``}
+          <div>
+            <div class="alt-name">${m.name}</div>
+            <div class="alt-desc">${m.desc}</div>
+          </div>
+        </div>
+        <div class="score-sm">${m.score}%</div>
+      </div>`).join("");
+
+  saveProfile(answers, {budget});
+}
+
+/* ---------- Profile drawer ---------- */
+function openDrawer(){
+  const body = document.getElementById("drawerBody");
+  const hasAny = answers.some(a => a && (!Array.isArray(a) || a.length));
+  if(!hasAny){
+    body.innerHTML = `<p class="drawer-empty">Todavía no has respondido el cuestionario. Complétalo para guardar tu perfil aquí.</p>`;
+  } else {
+    body.innerHTML = questions.map((q,i)=>{
+      const a = answers[i];
+      const val = a ? (Array.isArray(a) ? a.join(", ") : a) : "— sin responder —";
+      return `<div class="drawer-item">
+        <div class="k">${q.cat}</div>
+        <div class="v">${val}</div>
+        <button onclick="jumpToStep(${i})">Editar</button>
+      </div>`;
+    }).join("");
+  }
+  document.getElementById("drawer").classList.add("open");
+  document.getElementById("drawerBackdrop").classList.add("open");
+}
+function closeDrawer(){
+  document.getElementById("drawer").classList.remove("open");
+  document.getElementById("drawerBackdrop").classList.remove("open");
+}
+function jumpToStep(i){
+  step=i; closeDrawer(); render();
+}
+function editAnswers(){ step=0; render(); }
+function fullRestart(){
+  step=0; answers=Array(questions.length).fill(null);
+  clearProfile();
+  render();
+}
+
+document.getElementById("openDrawerBtn").onclick = openDrawer;
+document.getElementById("drawerBackdrop").onclick = closeDrawer;
+document.getElementById("editFromBanner").onclick = editAnswers;
+
+/* ---------- Boot: resume saved profile if present ---------- */
+(function boot(){
+  const saved = loadProfile();
+  if(saved && Array.isArray(saved.answers) && saved.answers.length===questions.length && saved.answers.every(a => a && (!Array.isArray(a) || a.length))){
+    answers = saved.answers;
+    recommend();
+    document.getElementById("resumeBanner").style.display="flex";
+  } else {
+    render();
+  }
+})();
+</script>
+</body>
+</html>
