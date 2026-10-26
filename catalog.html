@@ -173,7 +173,10 @@ nav.topbar{display:flex;align-items:center;justify-content:space-between;margin-
   border:1px solid rgba(216,31,42,.4); background:var(--accent-dim); border-radius:6px; padding:3px 6px}
 .fin-note{font-size:11.5px; color:var(--muted); line-height:1.5; margin:14px 0 0; opacity:.85; font-family:"Inter",sans-serif}
 .fin-cta{margin-top:20px; padding-top:20px; border-top:1px solid var(--line)}
-.fin-cta > .btn{width:100%}
+.fin-actions{display:grid; grid-template-columns:1fr auto; gap:8px}
+.ghost{background:transparent; color:var(--ink); border:1px solid var(--line-strong)}
+.ghost:hover{border-color:var(--accent); background:var(--accent-dim)}
+@media(max-width:480px){.fin-actions{grid-template-columns:1fr}}
 .fin-cta-title{font-size:15px; font-weight:600; margin:0 0 4px; font-family:"Inter",sans-serif}
 .fin-cta-sub{font-size:12.5px; color:var(--muted); margin:0 0 14px; line-height:1.5; font-family:"Inter",sans-serif}
 @media(max-width:620px){
@@ -342,14 +345,15 @@ section.block{margin-bottom:44px; scroll-margin-top:16px}
    ============================================================ */
 
 const SAVIA_STORAGE_KEY = "savia_advisor_profile_v1";
-const GYG_LEAD_KEY = "gyg_advisor_lead_v1";
+const GYG_LEAD_KEY = "gyg_advisor_lead_v1";      // prospecto actual
+const GYG_SELLER_KEY = "gyg_advisor_seller_v1";  // asesor que usa la herramienta
 
 /* ============================================================
    CONFIGURACIÓN COMERCIAL — editar aquí
    ============================================================ */
 
 /* URL del Web App de Apps Script que recibe los leads (ver leads.gs).
-   Vacío = los datos solo quedan guardados en el navegador del cliente. */
+   Vacío = los datos solo quedan guardados en este navegador. */
 const LEAD_ENDPOINT = "";
 
 /* Entidades de financiamiento.
@@ -362,7 +366,7 @@ const FIN_TERMS = [12, 24, 36, 48, 60];          // plazos en meses
 const FIN_DEFAULTS = { downPct:10, term:36 };    // prima % y plazo por defecto en la calculadora
 const FIN_TEASER_TERM = 60;                      // plazo usado para "cuota desde" en tarjetas y lista de precios
 
-const CONSENT_TEXT = "Acepto que GyG Medical Solutions me contacte por WhatsApp y correo sobre esta recomendación y su cotización.";
+const CONSENT_TEXT = "El cliente autorizó que GyG Medical Solutions lo contacte por WhatsApp y correo sobre esta recomendación y su cotización.";
 
 /* ---------- Catálogo Fotona ---------- */
 /* Specs de referencia a partir de información pública de Fotona.
@@ -671,6 +675,15 @@ function loadLead(){
 function saveLead(lead){
   try{ localStorage.setItem(GYG_LEAD_KEY, JSON.stringify(lead)); }catch(e){}
 }
+function clearLead(){
+  try{ localStorage.removeItem(GYG_LEAD_KEY); }catch(e){}
+}
+function loadSeller(){
+  try{ return localStorage.getItem(GYG_SELLER_KEY) || ""; }catch(e){ return ""; }
+}
+function saveSeller(name){
+  try{ localStorage.setItem(GYG_SELLER_KEY, name); }catch(e){}
+}
 
 /* Envía un evento (lead, cotización…) al endpoint y guarda copia local. */
 function sendLeadEvent(type, data){
@@ -678,6 +691,7 @@ function sendLeadEvent(type, data){
     type,
     at: new Date().toISOString(),
     page: (location.pathname.split("/").pop() || "index.html"),
+    seller: loadSeller(),
     lead: loadLead()
   }, data || {});
   try{
@@ -696,23 +710,26 @@ function sendLeadEvent(type, data){
 
 const PHONE_CODES = [["+506","CR"],["+503","SV"],["+507","PA"],["+502","GT"],["+504","HN"],["+505","NI"],["+52","MX"],["+57","CO"],["+1","US"]];
 
-/* Formulario de contacto reutilizable: compuerta de resultados, financiamiento y perfil. */
+/* Formulario de registro del prospecto (lo llena el asesor):
+   paso previo a la shortlist, financiamiento sin prospecto y panel de prospecto. */
 function renderLeadForm(container, opts){
   opts = opts || {};
   const prev = loadLead() || {};
   const code = prev.phoneCode || "+506";
   container.innerHTML = `
     <form class="lead-form" novalidate>
-      <label class="lf-field"><span>Nombre completo</span>
-        <input class="gyg-input" name="fullName" autocomplete="name" placeholder="Ej. María Fernández Rojas" value="${escapeHtml(prev.fullName)}"></label>
-      <label class="lf-field"><span>Correo electrónico</span>
-        <input class="gyg-input" name="email" type="email" autocomplete="email" inputmode="email" placeholder="nombre@clinica.com" value="${escapeHtml(prev.email)}"></label>
-      <div class="lf-field"><span>WhatsApp</span>
+      <label class="lf-field"><span>Tu nombre (asesor)</span>
+        <input class="gyg-input" name="seller" autocomplete="off" placeholder="Quién atiende al cliente" value="${escapeHtml(loadSeller())}"></label>
+      <label class="lf-field"><span>Nombre completo del cliente</span>
+        <input class="gyg-input" name="fullName" autocomplete="off" placeholder="Ej. María Fernández Rojas" value="${escapeHtml(prev.fullName)}"></label>
+      <label class="lf-field"><span>Correo del cliente</span>
+        <input class="gyg-input" name="email" type="email" autocomplete="off" inputmode="email" placeholder="nombre@clinica.com" value="${escapeHtml(prev.email)}"></label>
+      <div class="lf-field"><span>WhatsApp del cliente</span>
         <div class="lf-phone">
           <select class="gyg-input" name="phoneCode" aria-label="Código de país">
             ${PHONE_CODES.map(([c,n])=>`<option value="${c}" ${c===code?"selected":""}>${n} ${c}</option>`).join("")}
           </select>
-          <input class="gyg-input" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="8888 8888" value="${escapeHtml(prev.phone)}" aria-label="Número de WhatsApp">
+          <input class="gyg-input" name="phone" type="tel" autocomplete="off" inputmode="tel" placeholder="8888 8888" value="${escapeHtml(prev.phone)}" aria-label="Número de WhatsApp">
         </div>
       </div>
       <label class="lf-consent"><input type="checkbox" name="consent" ${prev.consent?"checked":""}><span>${CONSENT_TEXT}</span></label>
@@ -725,16 +742,18 @@ function renderLeadForm(container, opts){
   f.onsubmit = (e)=>{
     e.preventDefault();
     const el = f.elements;
+    const seller = el.seller.value.trim().replace(/\s+/g," ");
     const fullName = el.fullName.value.trim().replace(/\s+/g," ");
     const email = el.email.value.trim().toLowerCase();
     const phoneCode = el.phoneCode.value;
     const phone = el.phone.value.replace(/\D/g,"");
     const errs = [];
     f.querySelectorAll(".gyg-input").forEach(i=>i.classList.remove("invalid"));
-    if(fullName.split(" ").length < 2){ errs.push("Escribe tu nombre y al menos un apellido."); el.fullName.classList.add("invalid"); }
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ errs.push("Revisa el correo electrónico."); el.email.classList.add("invalid"); }
-    if(phone.length < 7 || phone.length > 12){ errs.push("Revisa el número de WhatsApp."); el.phone.classList.add("invalid"); }
-    if(!el.consent.checked){ errs.push("Necesitamos tu autorización para contactarte."); }
+    if(!seller){ errs.push("Indica tu nombre como asesor."); el.seller.classList.add("invalid"); }
+    if(fullName.split(" ").length < 2){ errs.push("Escribe el nombre y al menos un apellido del cliente."); el.fullName.classList.add("invalid"); }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ errs.push("Revisa el correo del cliente."); el.email.classList.add("invalid"); }
+    if(phone.length < 7 || phone.length > 12){ errs.push("Revisa el WhatsApp del cliente (sin código de país)."); el.phone.classList.add("invalid"); }
+    if(!el.consent.checked){ errs.push("Confirma con el cliente la autorización de contacto."); }
     f.querySelector(".lf-err").innerHTML = errs.join("<br>");
     if(errs.length) return;
 
@@ -745,6 +764,7 @@ function renderLeadForm(container, opts){
       consent: true, consentText: CONSENT_TEXT,
       createdAt: prev.createdAt || now, updatedAt: now
     };
+    saveSeller(seller);
     saveLead(lead);
     if(opts.onSubmit) opts.onSubmit(lead);
   };
@@ -844,7 +864,7 @@ function renderFinance(m){
   const st = { price:m.priceRef, downPct:FIN_DEFAULTS.downPct, term:FIN_DEFAULTS.term, results:[] };
 
   panel.innerHTML = `
-    <p class="fin-intro">Estima la cuota mensual de <b>${m.name}</b> con nuestras opciones de financiamiento. Ajusta precio, prima y plazo.</p>
+    <p class="fin-intro">Estima la cuota mensual de <b>${m.name}</b> con las opciones de financiamiento. Ajusta precio, prima y plazo junto con el cliente.</p>
     <div class="fin-grid">
       <label class="fin-field"><span>Precio del equipo (US$)</span>
         <input class="gyg-input" type="number" id="finPrice" min="0" step="500" inputmode="numeric" value="${m.priceRef}">
@@ -902,6 +922,26 @@ function renderFinance(m){
   renderFinanceCta(m, st);
 }
 
+/* Mensaje listo para enviar al cliente por WhatsApp */
+function quoteMessage(lead, m, st){
+  const down = st.price * st.downPct / 100;
+  const seller = loadSeller();
+  return [
+    `Hola ${firstName(lead.fullName)}, te comparto la referencia que revisamos del ${m.name}:`,
+    ``,
+    `• Precio de referencia: ${fmtUSD(st.price)}`,
+    `• Prima: ${st.downPct}% (${fmtUSD(down)}) · Plazo: ${st.term} meses`,
+    ...st.results.map(r=>`• ${r.name} (${r.rateLabel}): ${fmtUSD(r.payment)}/mes`),
+    ``,
+    `Montos de referencia, sujetos a cotización formal y aprobación de la entidad financiera.`,
+    `Quedo atento${seller ? `. ${seller}` : ``}, GyG Medical Solutions.`
+  ].join("\n");
+}
+function waLink(lead, text){
+  const n = (lead.phoneCode + lead.phone).replace(/\D/g,"");
+  return `https://wa.me/${n}?text=${encodeURIComponent(text)}`;
+}
+
 function renderFinanceCta(m, st){
   const box = document.getElementById("finCta");
   const quote = () => ({
@@ -910,26 +950,41 @@ function renderFinanceCta(m, st){
     price: st.price, downPct: st.downPct, term: st.term,
     options: st.results.map(r=>({ entity:r.name, rate:r.rateLabel, payment:Math.round(r.payment) }))
   });
-  const success = (lead)=>{
-    box.innerHTML = `<div class="lf-success">Listo, ${escapeHtml(firstName(lead.fullName))}. Un asesor de GyG Medical Solutions te escribirá al WhatsApp <b>${escapeHtml(lead.whatsapp)}</b> con la cotización formal de ${m.name} (${st.term} meses, ${st.downPct}% de prima).</div>`;
+
+  const renderActions = (lead)=>{
+    box.innerHTML = `
+      <div class="fin-cta-title">Cierre con ${escapeHtml(firstName(lead.fullName))}</div>
+      <p class="fin-cta-sub">Ajusta prima y plazo con el cliente y envíale el resumen. Queda registrado en su ficha con las condiciones elegidas.</p>
+      <div class="fin-actions">
+        <button class="btn primary" type="button" id="finWa">Enviar resumen por WhatsApp</button>
+        <button class="btn ghost" type="button" id="finCopy">Copiar resumen</button>
+      </div>
+      <p class="lf-foot" id="finStatus" style="margin-top:10px">Cliente: ${escapeHtml(lead.fullName)} · ${escapeHtml(lead.whatsapp)}</p>`;
+    const status = box.querySelector("#finStatus");
+    box.querySelector("#finWa").onclick = ()=>{
+      sendLeadEvent("cotizacion", Object.assign({ channel:"whatsapp" }, quote()));
+      window.open(waLink(lead, quoteMessage(lead, m, st)), "_blank", "noopener");
+      status.textContent = `Cotización registrada (${st.term} meses, ${st.downPct}% de prima) y WhatsApp abierto para ${lead.whatsapp}.`;
+    };
+    box.querySelector("#finCopy").onclick = async ()=>{
+      const text = quoteMessage(lead, m, st);
+      sendLeadEvent("cotizacion", Object.assign({ channel:"copiado" }, quote()));
+      let ok = false;
+      try{ await navigator.clipboard.writeText(text); ok = true; }catch(e){}
+      status.textContent = ok ? "Resumen copiado y cotización registrada." : "No se pudo copiar automáticamente; la cotización sí quedó registrada.";
+    };
   };
 
   const lead = loadLead();
-  if(lead){
-    box.innerHTML = `
-      <button class="btn primary" type="button" id="finReq">Solicitar cotización formal</button>
-      <p class="lf-foot" style="margin-top:8px">Se enviará con las condiciones que elegiste a nombre de ${escapeHtml(lead.fullName)} · ${escapeHtml(lead.whatsapp)}</p>`;
-    box.querySelector("#finReq").onclick = ()=>{ sendLeadEvent("cotizacion", quote()); success(lead); };
-  } else {
-    box.innerHTML = `
-      <div class="fin-cta-title">¿Te enviamos la cotización formal?</div>
-      <p class="fin-cta-sub">Un asesor la prepara con estas condiciones y te la envía por WhatsApp.</p>
-      <div id="finLeadForm"></div>`;
-    renderLeadForm(box.querySelector("#finLeadForm"), {
-      submitLabel: "Solicitar cotización formal",
-      onSubmit: (newLead)=>{ sendLeadEvent("cotizacion", Object.assign({ newLead:true }, quote())); success(newLead); }
-    });
-  }
+  if(lead){ renderActions(lead); return; }
+  box.innerHTML = `
+    <div class="fin-cta-title">Registra al prospecto para enviarle esta cotización</div>
+    <p class="fin-cta-sub">Sin datos del cliente puedes usar la calculadora para orientar la conversación; para enviarla y darle seguimiento, regístralo aquí.</p>
+    <div id="finLeadForm"></div>`;
+  renderLeadForm(box.querySelector("#finLeadForm"), {
+    submitLabel: "Registrar prospecto",
+    onSubmit: (newLead)=>{ sendLeadEvent("lead", { source:"financiamiento", machine:{ id:m.id, name:m.name } }); renderActions(newLead); }
+  });
 }
 </script>
 <script>
