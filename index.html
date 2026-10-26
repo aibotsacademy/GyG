@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>GyG Medical Solutions · Equipment Advisor </title>
+<title>GyG Medical Solutions · Equipment Advisor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -173,7 +173,10 @@ nav.topbar{display:flex;align-items:center;justify-content:space-between;margin-
   border:1px solid rgba(216,31,42,.4); background:var(--accent-dim); border-radius:6px; padding:3px 6px}
 .fin-note{font-size:11.5px; color:var(--muted); line-height:1.5; margin:14px 0 0; opacity:.85; font-family:"Inter",sans-serif}
 .fin-cta{margin-top:20px; padding-top:20px; border-top:1px solid var(--line)}
-.fin-cta > .btn{width:100%}
+.fin-actions{display:grid; grid-template-columns:1fr auto; gap:8px}
+.ghost{background:transparent; color:var(--ink); border:1px solid var(--line-strong)}
+.ghost:hover{border-color:var(--accent); background:var(--accent-dim)}
+@media(max-width:480px){.fin-actions{grid-template-columns:1fr}}
 .fin-cta-title{font-size:15px; font-weight:600; margin:0 0 4px; font-family:"Inter",sans-serif}
 .fin-cta-sub{font-size:12.5px; color:var(--muted); margin:0 0 14px; line-height:1.5; font-family:"Inter",sans-serif}
 @media(max-width:620px){
@@ -243,7 +246,21 @@ h1.display{font-size:50px; line-height:1.06; letter-spacing:-.01em; margin:16px 
 @keyframes beamPlay{0%{opacity:1}85%{opacity:1}100%{opacity:0}}
 @keyframes beamMove{from{left:-14%}to{left:100%}}
 
-/* ---------- Compuerta de contacto (antes de la shortlist) ---------- */
+/* ---------- Guía para el asesor ---------- */
+.qtip{margin:-8px 0 18px; padding:10px 12px; border-left:2px solid var(--accent); background:rgba(255,255,255,.025);
+  border-radius:0 8px 8px 0; font-size:12.5px; line-height:1.5; color:var(--muted); font-family:"Inter",sans-serif}
+.qtip b{color:var(--ink); font-weight:600}
+.qtip:empty{display:none}
+.seller-tip{margin:0 0 18px; padding:12px 14px; border:1px dashed var(--line-strong); border-radius:12px;
+  font-size:12.5px; line-height:1.55; color:var(--muted); font-family:"Inter",sans-serif}
+.seller-tip b{color:var(--ink); font-weight:600}
+.sales-guide{border:1px solid var(--line); background:var(--void-2); border-radius:14px; padding:14px 16px; margin:0 0 16px}
+.sales-guide .sg-title{font:11.5px "JetBrains Mono",monospace; color:var(--accent-strong); margin-bottom:8px}
+.sales-guide ol{margin:0; padding-left:18px; display:grid; gap:7px}
+.sales-guide li{font-size:13px; line-height:1.5; color:var(--muted); font-family:"Inter",sans-serif}
+.sales-guide li b{color:var(--ink); font-weight:600}
+
+/* ---------- Registro del prospecto (antes de la shortlist) ---------- */
 .gate{display:none; position:relative}
 .gate h2{font-size:28px; margin:6px 0 8px; font-family:"Playfair Display",serif}
 .gate-sub{color:var(--muted); font-size:14.5px; line-height:1.55; margin:0 0 18px; font-family:"Inter",sans-serif}
@@ -252,7 +269,7 @@ h1.display{font-size:50px; line-height:1.06; letter-spacing:-.01em; margin:16px 
   border:1px solid var(--line); border-radius:12px; background:var(--void-2)}
 .teaser-row.top{border-color:rgba(216,31,42,.4); background:linear-gradient(135deg, rgba(216,31,42,.07), transparent 60%), var(--void-2)}
 .t-cat{font:11.5px "JetBrains Mono",monospace; color:var(--muted); margin-bottom:4px}
-.t-name{filter:blur(6px); user-select:none; font-weight:600; font-size:15px; font-family:"Inter",sans-serif}
+.t-name{font-weight:600; font-size:15px; font-family:"Inter",sans-serif}
 .t-score{font:600 16px "JetBrains Mono",monospace; color:var(--accent-strong); white-space:nowrap}
 .gate-back{margin-top:10px; padding-left:0}
 
@@ -320,23 +337,24 @@ h1.display{font-size:50px; line-height:1.06; letter-spacing:-.01em; margin:16px 
 
 <div class="shell">
   <nav class="topbar">
-    <div class="brand"><span class="dot"></span>GyG Medical Solutions<span class="tag">equipment advisor</span></div>
+    <div class="brand"><span class="dot"></span>GyG Medical Solutions<span class="tag">asesor comercial · uso interno</span></div>
     <div class="nav-actions">
-      <button class="pill-btn" id="openDrawerBtn">Mi perfil</button>
+      <button class="pill-btn" id="openDrawerBtn">Prospecto</button>
+      <button class="pill-btn accent" id="newProspectBtn">Nuevo prospecto</button>
       <a class="pill-btn" href="catalog.html">Catálogo y precios</a>
     </div>
   </nav>
 
   <section class="hero">
     <div>
-      <div class="eyebrow">Inteligencia comercial · tecnología médico-estética</div>
-      <h1 class="display">Encuentra el equipo correcto para tu clínica.</h1>
-      <p class="lead">Cuéntanos qué quieres ofrecer, cómo opera tu clínica y cuál es tu rango de inversión. GyG Medical Solutions compara tu perfil con el portafolio Fotona y prioriza los equipos con mayor encaje comercial.</p>
+      <div class="eyebrow">Herramienta para asesores de venta</div>
+      <h1 class="display">Guía la conversación hacia el equipo correcto.</h1>
+      <p class="lead">Haz las 7 preguntas con el cliente, registra sus datos y presenta una shortlist del portafolio Fotona con precios, cuotas de referencia y una guía de cómo presentarla. Cierra enviando el resumen de financiamiento por WhatsApp.</p>
       <div class="features">
-        <div class="feature"><b>7</b> preguntas</div>
-        <div class="feature">Shortlist con <b>especificaciones y video</b></div>
+        <div class="feature"><b>7</b> preguntas con tips de venta</div>
+        <div class="feature">Registro del <b>prospecto</b></div>
+        <div class="feature">Shortlist con <b>guía de presentación</b></div>
         <div class="feature"><b>Calculadora de cuota</b> BAC y ATI Capital</div>
-        <div class="feature">Perfil <b>editable</b> en cualquier momento</div>
       </div>
     </div>
 
@@ -346,6 +364,7 @@ h1.display{font-size:50px; line-height:1.06; letter-spacing:-.01em; margin:16px 
         <div class="progress"><div class="bar" id="bar"></div></div>
         <div class="qcat" id="category">Objetivo clínico</div>
         <div class="question" id="question"></div>
+        <div class="qtip" id="qtip"></div>
         <div class="options" id="options"></div>
         <div class="actions">
           <button class="btn secondary" id="back">Atrás</button>
@@ -354,9 +373,10 @@ h1.display{font-size:50px; line-height:1.06; letter-spacing:-.01em; margin:16px 
       </div>
 
       <div class="gate" id="gate">
-        <div class="eyebrow">Análisis completo</div>
-        <h2>Tu shortlist está lista.</h2>
-        <p class="gate-sub">Comparamos tus respuestas con los <span id="gateCount"></span> equipos del portafolio Fotona. Déjanos tus datos para ver tus recomendaciones con precios y cuotas de referencia; un asesor puede darte seguimiento por WhatsApp.</p>
+        <div class="eyebrow">Paso final · registro del prospecto</div>
+        <h2>Registra al cliente antes de presentar.</h2>
+        <p class="gate-sub">El perfil ya se comparó con los <span id="gateCount"></span> equipos del portafolio. Registra los datos del cliente para asociar esta shortlist a su ficha y darle seguimiento.</p>
+        <div class="seller-tip"><b>Cómo pedirlo:</b> “Para enviarte el resumen con precios y cuotas por WhatsApp, ¿me confirmas tu nombre completo, correo y número?” Confirma el número en voz alta y su autorización de contacto.</div>
         <div class="teaser" id="teaser"></div>
         <div id="gateForm"></div>
         <button class="btn secondary gate-back" id="gateBack">← Volver a las preguntas</button>
@@ -364,20 +384,21 @@ h1.display{font-size:50px; line-height:1.06; letter-spacing:-.01em; margin:16px 
 
       <div class="results" id="results">
         <div class="result-banner" id="resumeBanner" style="display:none">
-          <span>Estamos usando tu perfil guardado anteriormente.</span>
+          <span id="resumeText">Retomando la sesión del prospecto actual.</span>
           <button id="editFromBanner">Editar respuestas</button>
         </div>
         <div class="result-head">
-          <div class="eyebrow">Perfil analizado</div>
+          <div class="eyebrow">Shortlist del prospecto</div>
           <h2 id="resultTitle">Tu shortlist inicial</h2>
         </div>
-        <p class="result-sub">Estas son las opciones con mayor encaje según tus objetivos, presupuesto, pacientes y estrategia comercial. Toca cualquier equipo para ver especificaciones, financiamiento y video.</p>
+        <p class="result-sub">Opciones con mayor encaje según los objetivos, presupuesto, demanda y estrategia del cliente. Toca un equipo para mostrar especificaciones, financiamiento y video.</p>
+        <div class="sales-guide" id="salesGuide"></div>
         <div id="machines"></div>
         <div class="restart-row">
           <button class="btn primary" onclick="editAnswers()">Ajustar respuestas</button>
-          <button class="btn secondary" onclick="fullRestart()">Empezar de nuevo</button>
+          <button class="btn secondary" onclick="newProspect()">Nuevo prospecto</button>
         </div>
-        <div class="disclaimer">Prototipo conceptual. Precios, cuotas, tiempos de sesión y huella en piso son de referencia y deben confirmarse contra la ficha técnica, la lista de precios vigente del distribuidor y las condiciones de cada entidad financiera.</div>
+        <div class="disclaimer">Uso interno. Precios, cuotas, tiempos de sesión y huella en piso son de referencia y deben confirmarse contra la ficha técnica, la lista de precios vigente del distribuidor y las condiciones de cada entidad financiera.</div>
       </div>
     </div>
   </section>
@@ -386,9 +407,10 @@ h1.display{font-size:50px; line-height:1.06; letter-spacing:-.01em; margin:16px 
 <!-- Profile drawer -->
 <div class="drawer-backdrop" id="drawerBackdrop"></div>
 <div class="drawer" id="drawer">
-  <h3>Mi perfil</h3>
-  <p class="sub">Tus datos y respuestas actuales. Edita cualquiera para recalcular la shortlist.</p>
+  <h3>Prospecto actual</h3>
+  <p class="sub">Datos del cliente y respuestas del cuestionario. Edita cualquiera para recalcular la shortlist.</p>
   <div id="drawerBody"></div>
+  <button class="btn ghost" style="width:100%; margin-top:18px" onclick="newProspect()">Nuevo prospecto</button>
 </div>
 
 <script>
@@ -401,14 +423,15 @@ h1.display{font-size:50px; line-height:1.06; letter-spacing:-.01em; margin:16px 
    ============================================================ */
 
 const SAVIA_STORAGE_KEY = "savia_advisor_profile_v1";
-const GYG_LEAD_KEY = "gyg_advisor_lead_v1";
+const GYG_LEAD_KEY = "gyg_advisor_lead_v1";      // prospecto actual
+const GYG_SELLER_KEY = "gyg_advisor_seller_v1";  // asesor que usa la herramienta
 
 /* ============================================================
    CONFIGURACIÓN COMERCIAL — editar aquí
    ============================================================ */
 
 /* URL del Web App de Apps Script que recibe los leads (ver leads.gs).
-   Vacío = los datos solo quedan guardados en el navegador del cliente. */
+   Vacío = los datos solo quedan guardados en este navegador. */
 const LEAD_ENDPOINT = "";
 
 /* Entidades de financiamiento.
@@ -421,7 +444,7 @@ const FIN_TERMS = [12, 24, 36, 48, 60];          // plazos en meses
 const FIN_DEFAULTS = { downPct:10, term:36 };    // prima % y plazo por defecto en la calculadora
 const FIN_TEASER_TERM = 60;                      // plazo usado para "cuota desde" en tarjetas y lista de precios
 
-const CONSENT_TEXT = "Acepto que GyG Medical Solutions me contacte por WhatsApp y correo sobre esta recomendación y su cotización.";
+const CONSENT_TEXT = "El cliente autorizó que GyG Medical Solutions lo contacte por WhatsApp y correo sobre esta recomendación y su cotización.";
 
 /* ---------- Catálogo Fotona ---------- */
 /* Specs de referencia a partir de información pública de Fotona.
@@ -730,6 +753,15 @@ function loadLead(){
 function saveLead(lead){
   try{ localStorage.setItem(GYG_LEAD_KEY, JSON.stringify(lead)); }catch(e){}
 }
+function clearLead(){
+  try{ localStorage.removeItem(GYG_LEAD_KEY); }catch(e){}
+}
+function loadSeller(){
+  try{ return localStorage.getItem(GYG_SELLER_KEY) || ""; }catch(e){ return ""; }
+}
+function saveSeller(name){
+  try{ localStorage.setItem(GYG_SELLER_KEY, name); }catch(e){}
+}
 
 /* Envía un evento (lead, cotización…) al endpoint y guarda copia local. */
 function sendLeadEvent(type, data){
@@ -737,6 +769,7 @@ function sendLeadEvent(type, data){
     type,
     at: new Date().toISOString(),
     page: (location.pathname.split("/").pop() || "index.html"),
+    seller: loadSeller(),
     lead: loadLead()
   }, data || {});
   try{
@@ -755,23 +788,26 @@ function sendLeadEvent(type, data){
 
 const PHONE_CODES = [["+506","CR"],["+503","SV"],["+507","PA"],["+502","GT"],["+504","HN"],["+505","NI"],["+52","MX"],["+57","CO"],["+1","US"]];
 
-/* Formulario de contacto reutilizable: compuerta de resultados, financiamiento y perfil. */
+/* Formulario de registro del prospecto (lo llena el asesor):
+   paso previo a la shortlist, financiamiento sin prospecto y panel de prospecto. */
 function renderLeadForm(container, opts){
   opts = opts || {};
   const prev = loadLead() || {};
   const code = prev.phoneCode || "+506";
   container.innerHTML = `
     <form class="lead-form" novalidate>
-      <label class="lf-field"><span>Nombre completo</span>
-        <input class="gyg-input" name="fullName" autocomplete="name" placeholder="Ej. María Fernández Rojas" value="${escapeHtml(prev.fullName)}"></label>
-      <label class="lf-field"><span>Correo electrónico</span>
-        <input class="gyg-input" name="email" type="email" autocomplete="email" inputmode="email" placeholder="nombre@clinica.com" value="${escapeHtml(prev.email)}"></label>
-      <div class="lf-field"><span>WhatsApp</span>
+      <label class="lf-field"><span>Tu nombre (asesor)</span>
+        <input class="gyg-input" name="seller" autocomplete="off" placeholder="Quién atiende al cliente" value="${escapeHtml(loadSeller())}"></label>
+      <label class="lf-field"><span>Nombre completo del cliente</span>
+        <input class="gyg-input" name="fullName" autocomplete="off" placeholder="Ej. María Fernández Rojas" value="${escapeHtml(prev.fullName)}"></label>
+      <label class="lf-field"><span>Correo del cliente</span>
+        <input class="gyg-input" name="email" type="email" autocomplete="off" inputmode="email" placeholder="nombre@clinica.com" value="${escapeHtml(prev.email)}"></label>
+      <div class="lf-field"><span>WhatsApp del cliente</span>
         <div class="lf-phone">
           <select class="gyg-input" name="phoneCode" aria-label="Código de país">
             ${PHONE_CODES.map(([c,n])=>`<option value="${c}" ${c===code?"selected":""}>${n} ${c}</option>`).join("")}
           </select>
-          <input class="gyg-input" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="8888 8888" value="${escapeHtml(prev.phone)}" aria-label="Número de WhatsApp">
+          <input class="gyg-input" name="phone" type="tel" autocomplete="off" inputmode="tel" placeholder="8888 8888" value="${escapeHtml(prev.phone)}" aria-label="Número de WhatsApp">
         </div>
       </div>
       <label class="lf-consent"><input type="checkbox" name="consent" ${prev.consent?"checked":""}><span>${CONSENT_TEXT}</span></label>
@@ -784,16 +820,18 @@ function renderLeadForm(container, opts){
   f.onsubmit = (e)=>{
     e.preventDefault();
     const el = f.elements;
+    const seller = el.seller.value.trim().replace(/\s+/g," ");
     const fullName = el.fullName.value.trim().replace(/\s+/g," ");
     const email = el.email.value.trim().toLowerCase();
     const phoneCode = el.phoneCode.value;
     const phone = el.phone.value.replace(/\D/g,"");
     const errs = [];
     f.querySelectorAll(".gyg-input").forEach(i=>i.classList.remove("invalid"));
-    if(fullName.split(" ").length < 2){ errs.push("Escribe tu nombre y al menos un apellido."); el.fullName.classList.add("invalid"); }
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ errs.push("Revisa el correo electrónico."); el.email.classList.add("invalid"); }
-    if(phone.length < 7 || phone.length > 12){ errs.push("Revisa el número de WhatsApp."); el.phone.classList.add("invalid"); }
-    if(!el.consent.checked){ errs.push("Necesitamos tu autorización para contactarte."); }
+    if(!seller){ errs.push("Indica tu nombre como asesor."); el.seller.classList.add("invalid"); }
+    if(fullName.split(" ").length < 2){ errs.push("Escribe el nombre y al menos un apellido del cliente."); el.fullName.classList.add("invalid"); }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ errs.push("Revisa el correo del cliente."); el.email.classList.add("invalid"); }
+    if(phone.length < 7 || phone.length > 12){ errs.push("Revisa el WhatsApp del cliente (sin código de país)."); el.phone.classList.add("invalid"); }
+    if(!el.consent.checked){ errs.push("Confirma con el cliente la autorización de contacto."); }
     f.querySelector(".lf-err").innerHTML = errs.join("<br>");
     if(errs.length) return;
 
@@ -804,6 +842,7 @@ function renderLeadForm(container, opts){
       consent: true, consentText: CONSENT_TEXT,
       createdAt: prev.createdAt || now, updatedAt: now
     };
+    saveSeller(seller);
     saveLead(lead);
     if(opts.onSubmit) opts.onSubmit(lead);
   };
@@ -903,7 +942,7 @@ function renderFinance(m){
   const st = { price:m.priceRef, downPct:FIN_DEFAULTS.downPct, term:FIN_DEFAULTS.term, results:[] };
 
   panel.innerHTML = `
-    <p class="fin-intro">Estima la cuota mensual de <b>${m.name}</b> con nuestras opciones de financiamiento. Ajusta precio, prima y plazo.</p>
+    <p class="fin-intro">Estima la cuota mensual de <b>${m.name}</b> con las opciones de financiamiento. Ajusta precio, prima y plazo junto con el cliente.</p>
     <div class="fin-grid">
       <label class="fin-field"><span>Precio del equipo (US$)</span>
         <input class="gyg-input" type="number" id="finPrice" min="0" step="500" inputmode="numeric" value="${m.priceRef}">
@@ -961,6 +1000,26 @@ function renderFinance(m){
   renderFinanceCta(m, st);
 }
 
+/* Mensaje listo para enviar al cliente por WhatsApp */
+function quoteMessage(lead, m, st){
+  const down = st.price * st.downPct / 100;
+  const seller = loadSeller();
+  return [
+    `Hola ${firstName(lead.fullName)}, te comparto la referencia que revisamos del ${m.name}:`,
+    ``,
+    `• Precio de referencia: ${fmtUSD(st.price)}`,
+    `• Prima: ${st.downPct}% (${fmtUSD(down)}) · Plazo: ${st.term} meses`,
+    ...st.results.map(r=>`• ${r.name} (${r.rateLabel}): ${fmtUSD(r.payment)}/mes`),
+    ``,
+    `Montos de referencia, sujetos a cotización formal y aprobación de la entidad financiera.`,
+    `Quedo atento${seller ? `. ${seller}` : ``}, GyG Medical Solutions.`
+  ].join("\n");
+}
+function waLink(lead, text){
+  const n = (lead.phoneCode + lead.phone).replace(/\D/g,"");
+  return `https://wa.me/${n}?text=${encodeURIComponent(text)}`;
+}
+
 function renderFinanceCta(m, st){
   const box = document.getElementById("finCta");
   const quote = () => ({
@@ -969,37 +1028,52 @@ function renderFinanceCta(m, st){
     price: st.price, downPct: st.downPct, term: st.term,
     options: st.results.map(r=>({ entity:r.name, rate:r.rateLabel, payment:Math.round(r.payment) }))
   });
-  const success = (lead)=>{
-    box.innerHTML = `<div class="lf-success">Listo, ${escapeHtml(firstName(lead.fullName))}. Un asesor de GyG Medical Solutions te escribirá al WhatsApp <b>${escapeHtml(lead.whatsapp)}</b> con la cotización formal de ${m.name} (${st.term} meses, ${st.downPct}% de prima).</div>`;
+
+  const renderActions = (lead)=>{
+    box.innerHTML = `
+      <div class="fin-cta-title">Cierre con ${escapeHtml(firstName(lead.fullName))}</div>
+      <p class="fin-cta-sub">Ajusta prima y plazo con el cliente y envíale el resumen. Queda registrado en su ficha con las condiciones elegidas.</p>
+      <div class="fin-actions">
+        <button class="btn primary" type="button" id="finWa">Enviar resumen por WhatsApp</button>
+        <button class="btn ghost" type="button" id="finCopy">Copiar resumen</button>
+      </div>
+      <p class="lf-foot" id="finStatus" style="margin-top:10px">Cliente: ${escapeHtml(lead.fullName)} · ${escapeHtml(lead.whatsapp)}</p>`;
+    const status = box.querySelector("#finStatus");
+    box.querySelector("#finWa").onclick = ()=>{
+      sendLeadEvent("cotizacion", Object.assign({ channel:"whatsapp" }, quote()));
+      window.open(waLink(lead, quoteMessage(lead, m, st)), "_blank", "noopener");
+      status.textContent = `Cotización registrada (${st.term} meses, ${st.downPct}% de prima) y WhatsApp abierto para ${lead.whatsapp}.`;
+    };
+    box.querySelector("#finCopy").onclick = async ()=>{
+      const text = quoteMessage(lead, m, st);
+      sendLeadEvent("cotizacion", Object.assign({ channel:"copiado" }, quote()));
+      let ok = false;
+      try{ await navigator.clipboard.writeText(text); ok = true; }catch(e){}
+      status.textContent = ok ? "Resumen copiado y cotización registrada." : "No se pudo copiar automáticamente; la cotización sí quedó registrada.";
+    };
   };
 
   const lead = loadLead();
-  if(lead){
-    box.innerHTML = `
-      <button class="btn primary" type="button" id="finReq">Solicitar cotización formal</button>
-      <p class="lf-foot" style="margin-top:8px">Se enviará con las condiciones que elegiste a nombre de ${escapeHtml(lead.fullName)} · ${escapeHtml(lead.whatsapp)}</p>`;
-    box.querySelector("#finReq").onclick = ()=>{ sendLeadEvent("cotizacion", quote()); success(lead); };
-  } else {
-    box.innerHTML = `
-      <div class="fin-cta-title">¿Te enviamos la cotización formal?</div>
-      <p class="fin-cta-sub">Un asesor la prepara con estas condiciones y te la envía por WhatsApp.</p>
-      <div id="finLeadForm"></div>`;
-    renderLeadForm(box.querySelector("#finLeadForm"), {
-      submitLabel: "Solicitar cotización formal",
-      onSubmit: (newLead)=>{ sendLeadEvent("cotizacion", Object.assign({ newLead:true }, quote())); success(newLead); }
-    });
-  }
+  if(lead){ renderActions(lead); return; }
+  box.innerHTML = `
+    <div class="fin-cta-title">Registra al prospecto para enviarle esta cotización</div>
+    <p class="fin-cta-sub">Sin datos del cliente puedes usar la calculadora para orientar la conversación; para enviarla y darle seguimiento, regístralo aquí.</p>
+    <div id="finLeadForm"></div>`;
+  renderLeadForm(box.querySelector("#finLeadForm"), {
+    submitLabel: "Registrar prospecto",
+    onSubmit: (newLead)=>{ sendLeadEvent("lead", { source:"financiamiento", machine:{ id:m.id, name:m.name } }); renderActions(newLead); }
+  });
 }
 </script>
 <script>
 const questions=[
- {cat:"Objetivo clínico",q:"¿Qué tratamientos quieres impulsar principalmente?",multi:true,o:["Rejuvenecimiento facial","Tensado corporal / remodelación","Acné y cicatrices","Lesiones pigmentadas","Remoción de tatuajes","Salud íntima / ginecología","Depilación","Roncopatía y sueño","Odontología láser","Quiero ampliar varias áreas"]},
- {cat:"Inversión",q:"¿Cuál es tu rango aproximado de inversión?",o:["Hasta US$20K","US$20K–40K","US$40K–70K","US$70K–120K","Más de US$120K","Prefiero evaluar por cuota mensual"]},
- {cat:"Modelo financiero",q:"¿Qué pesa más en tu decisión?",o:["Menor inversión inicial","Recuperar inversión rápido","Mayor margen por tratamiento","Financiamiento / cuota manejable","La mejor tecnología aunque requiera mayor inversión"]},
- {cat:"Tu clínica",q:"¿Cómo describirías tu operación actual?",o:["Estoy abriendo una clínica","Consultorio pequeño / boutique","Clínica estética establecida","Centro médico multidisciplinario","Hospital / centro de alto volumen"]},
- {cat:"Demanda",q:"¿Cuántos tratamientos con el nuevo equipo proyectas al mes?",o:["Menos de 15","15–30","31–60","61–100","Más de 100","Todavía no lo sé"]},
- {cat:"Portafolio",q:"¿Qué tipo de equipo te conviene más?",o:["Especialista: excelente en una indicación","Versátil: varias indicaciones","Plataforma premium para diferenciar la clínica","No lo sé; recomiéndame"]},
- {cat:"Prioridad",q:"¿Cuál sería un resultado exitoso en los próximos 12 meses?",o:["Agregar una nueva línea de ingresos","Aumentar ticket promedio","Captar más pacientes","Diferenciarme de competidores","Reemplazar tecnología existente","Expandir el menú de tratamientos"]}
+ {tip:'Pregunta abierta primero: ¿qué tratamientos le piden hoy sus pacientes y no puede ofrecer? Puedes marcar varias opciones.',cat:"Objetivo clínico",q:"¿Qué tratamientos quieres impulsar principalmente?",multi:true,o:["Rejuvenecimiento facial","Tensado corporal / remodelación","Acné y cicatrices","Lesiones pigmentadas","Remoción de tatuajes","Salud íntima / ginecología","Depilación","Roncopatía y sueño","Odontología láser","Quiero ampliar varias áreas"]},
+ {tip:'Si duda en dar una cifra, ofrece “Prefiero evaluar por cuota mensual”: la shortlist se mostrará con la pestaña de financiamiento abierta.',cat:"Inversión",q:"¿Cuál es tu rango aproximado de inversión?",o:["Hasta US$20K","US$20K–40K","US$40K–70K","US$70K–120K","Más de US$120K","Prefiero evaluar por cuota mensual"]},
+ {tip:'Esta respuesta define cómo presentar: cuota, retorno, margen o tecnología. Escucha la razón detrás.',cat:"Modelo financiero",q:"¿Qué pesa más en tu decisión?",o:["Menor inversión inicial","Recuperar inversión rápido","Mayor margen por tratamiento","Financiamiento / cuota manejable","La mejor tecnología aunque requiera mayor inversión"]},
+ {tip:'Ayuda a dimensionar el equipo y el acompañamiento (capacitación, marketing) que vas a ofrecer.',cat:"Tu clínica",q:"¿Cómo describirías tu operación actual?",o:["Estoy abriendo una clínica","Consultorio pequeño / boutique","Clínica estética establecida","Centro médico multidisciplinario","Hospital / centro de alto volumen"]},
+ {tip:'Pide un estimado aunque sea aproximado; te sirve para hablar de retorno: cuántas sesiones al mes cubren la cuota.',cat:"Demanda",q:"¿Cuántos tratamientos con el nuevo equipo proyectas al mes?",o:["Menos de 15","15–30","31–60","61–100","Más de 100","Todavía no lo sé"]},
+ {tip:'Si no está seguro, marca “No lo sé; recomiéndame”: el motor no penaliza ninguna opción.',cat:"Portafolio",q:"¿Qué tipo de equipo te conviene más?",o:["Especialista: excelente en una indicación","Versátil: varias indicaciones","Plataforma premium para diferenciar la clínica","No lo sé; recomiéndame"]},
+ {tip:'Anota mentalmente esta meta: es el argumento de cierre que vas a usar al presentar la shortlist.',cat:"Prioridad",q:"¿Cuál sería un resultado exitoso en los próximos 12 meses?",o:["Agregar una nueva línea de ingresos","Aumentar ticket promedio","Captar más pacientes","Diferenciarme de competidores","Reemplazar tecnología existente","Expandir el menú de tratamientos"]}
 ];
 
 let step=0, answers=Array(questions.length).fill(null), lastRanked=null;
@@ -1021,6 +1095,7 @@ function render(){
   document.getElementById("bar").style.width=`${((step+1)/questions.length)*100}%`;
   document.getElementById("category").textContent=x.cat;
   qEl.textContent=x.q; optsEl.innerHTML="";
+  document.getElementById("qtip").innerHTML = x.tip ? `<b>Tip para el asesor:</b> ${x.tip}` : "";
   x.o.forEach(v=>{
     let b=document.createElement("button"); b.className="option";
     let a=answers[step];
@@ -1055,11 +1130,12 @@ function playSweepThen(cb){
 }
 
 /* ---------- Motor de recomendación ---------- */
+const BUDGET_MAP={"Hasta US$20K":1,"US$20K–40K":2,"US$40K–70K":3,"US$70K–120K":4,"Más de US$120K":5,"Prefiero evaluar por cuota mensual":3};
+
 function rankCatalog(){
   const treatments = Array.isArray(answers[0]) ? answers[0] : [answers[0]];
   const pref = answers[5];
-  const bmap={"Hasta US$20K":1,"US$20K–40K":2,"US$40K–70K":3,"US$70K–120K":4,"Más de US$120K":5,"Prefiero evaluar por cuota mensual":3};
-  const b = bmap[answers[1]];
+  const b = BUDGET_MAP[answers[1]];
 
   return CATALOG.map(m=>{
     let s=45;
@@ -1090,7 +1166,7 @@ function finishQuiz(){
   else showGate(lastRanked);
 }
 
-/* ---------- Compuerta de contacto ---------- */
+/* ---------- Registro del prospecto ---------- */
 function showGate(ranked, opts){
   showPanel("gate");
   document.getElementById("gateCount").textContent = CATALOG.length;
@@ -1098,14 +1174,14 @@ function showGate(ranked, opts){
     <div class="teaser-row ${i===0?"top":""}">
       <div>
         <div class="t-cat">${i===0?"Mejor encaje":"Alternativa"} · ${m.category}</div>
-        <div class="t-name" aria-hidden="true">${i===0?"Equipo recomendado":"Opción alternativa"}</div>
+        <div class="t-name">${m.name}</div>
       </div>
       <div class="t-score">${m.score}%</div>
     </div>`).join("");
 
   renderLeadForm(document.getElementById("gateForm"), {
-    submitLabel: "Ver mi shortlist",
-    footnote: "Tus datos solo se usan para darte seguimiento sobre esta recomendación.",
+    submitLabel: "Registrar y presentar shortlist",
+    footnote: "Se guarda con las respuestas y la shortlist para el seguimiento comercial.",
     onSubmit: ()=>{
       sendLeadEvent("lead", {
         source: "asesor",
@@ -1119,6 +1195,41 @@ function showGate(ranked, opts){
 }
 document.getElementById("gateBack").onclick = ()=>{ step=questions.length-1; render(); };
 
+/* ---------- Guía de presentación para el asesor ---------- */
+function salesGuide(ranked){
+  const [top, ...rest] = ranked;
+  const treatments = Array.isArray(answers[0]) ? answers[0] : [answers[0]];
+  const matched = top.tags.filter(t=>treatments.includes(t));
+  const items = [];
+
+  items.push(`Abre con <b>${top.name}</b>${matched.length ? `: conéctalo con ${matched.slice(0,2).join(" y ").toLowerCase()}, que es lo que el cliente quiere impulsar` : ``}.`);
+
+  const fin = preferredTab()==="finance";
+  if(fin){
+    items.push(`Habla de cuota antes que de precio: <b>desde ${fmtUSD(lowestPaymentFrom(top))}/mes</b>. La ficha se abre en Financiamiento para ajustar prima y plazo con él.`);
+  } else if(answers[2]==="Recuperar inversión rápido"){
+    items.push(`Enfoca en retorno: con ${answers[4]==="Todavía no lo sé" ? "su demanda estimada" : `${answers[4]} tratamientos al mes`}, calcula juntos cuántas sesiones cubren la cuota de ${fmtUSD(lowestPaymentFrom(top))}/mes.`);
+  } else if(answers[2]==="Mayor margen por tratamiento" || answers[6]==="Aumentar ticket promedio"){
+    items.push(`Enfoca en ticket y margen por sesión, no en el precio del equipo: muestra qué tratamientos de mayor valor puede sumar al menú.`);
+  } else if(answers[2]==="La mejor tecnología aunque requiera mayor inversión" || answers[6]==="Diferenciarme de competidores"){
+    items.push(`Resalta diferenciación: tecnología que la competencia local no tiene y resultados que puede comunicar a sus pacientes.`);
+  } else {
+    items.push(`Presenta el precio de referencia (≈ ${fmtUSD(top.priceRef)}) junto con la cuota, para que compare inversión inicial vs. mensual.`);
+  }
+
+  if(top.price > (BUDGET_MAP[answers[1]]||3) && answers[1]!=="Prefiero evaluar por cuota mensual"){
+    items.push(`Ojo: el mejor encaje (${top.priceLabel}) está por encima del rango que indicó (${answers[1]}). Muestra la cuota mensual y ten lista la alternativa más accesible.`);
+  }
+  if(answers[3]==="Estoy abriendo una clínica"){
+    items.push(`Clínica nueva: propón arrancar con una indicación de alta demanda y crecer después; menciona capacitación y acompañamiento de lanzamiento.`);
+  }
+
+  if(rest.length) items.push(`Plan B: ${rest.map(m=>`<b>${m.name}</b>`).join(" o ")} si busca otra inversión o enfoque.`);
+  items.push(`Cierra desde la pestaña Financiamiento: <b>Enviar resumen por WhatsApp</b> deja la cotización registrada.`);
+
+  return `<div class="sg-title">Cómo presentarlo</div><ol>${items.map(i=>`<li>${i}</li>`).join("")}</ol>`;
+}
+
 /* ---------- Resultados ---------- */
 function priceLine(m){
   return `<div class="price-line">
@@ -1131,7 +1242,8 @@ function showResults(ranked, opts){
   showPanel("results");
   document.getElementById("resumeBanner").style.display="none";
   const lead = loadLead();
-  document.getElementById("resultTitle").textContent = (lead && lead.fullName) ? `Tu shortlist, ${firstName(lead.fullName)}` : "Tu shortlist inicial";
+  document.getElementById("resultTitle").textContent = (lead && lead.fullName) ? `Shortlist para ${lead.fullName}` : "Shortlist del prospecto";
+  document.getElementById("salesGuide").innerHTML = salesGuide(ranked);
 
   const treatments = Array.isArray(answers[0]) ? answers[0] : [answers[0]];
   const budget = answers[1];
@@ -1175,14 +1287,14 @@ function openDrawer(){
   const lead = loadLead();
   const contact = lead ? `
     <div class="drawer-item">
-      <div class="k">Datos de contacto</div>
+      <div class="k">Cliente · atendido por ${escapeHtml(loadSeller() || "—")}</div>
       <div class="v">${escapeHtml(lead.fullName)}<br>${escapeHtml(lead.email)}<br>WhatsApp ${escapeHtml(lead.whatsapp)}</div>
       <button onclick="editContact()">Actualizar datos</button>
     </div>` : ``;
 
   const hasAny = answers.some(a => a && (!Array.isArray(a) || a.length));
   const answersHtml = !hasAny
-    ? `<p class="drawer-empty">Todavía no has respondido el cuestionario. Complétalo para guardar tu perfil aquí.</p>`
+    ? `<p class="drawer-empty">Todavía no hay respuestas para este prospecto. Completa el cuestionario con el cliente.</p>`
     : questions.map((q,i)=>{
         const a = answers[i];
         const val = a ? (Array.isArray(a) ? a.join(", ") : a) : "— sin responder —";
@@ -1199,7 +1311,7 @@ function openDrawer(){
 }
 function editContact(){
   const body = document.getElementById("drawerBody");
-  body.innerHTML = `<div class="drawer-item"><div class="k">Actualizar datos de contacto</div></div><div id="drawerLeadForm" style="margin-top:14px"></div>`;
+  body.innerHTML = `<div class="drawer-item"><div class="k">Actualizar datos del prospecto</div></div><div id="drawerLeadForm" style="margin-top:14px"></div>`;
   renderLeadForm(document.getElementById("drawerLeadForm"), {
     submitLabel: "Guardar datos",
     onSubmit: ()=>{
@@ -1217,13 +1329,18 @@ function jumpToStep(i){
   step=i; closeDrawer(); render();
 }
 function editAnswers(){ step=0; render(); }
-function fullRestart(){
+/* Cada cliente es un prospecto nuevo: limpia respuestas y datos del cliente (el nombre del asesor se conserva). */
+function newProspect(){
+  const hasData = loadLead() || answers.some(a => a && (!Array.isArray(a) || a.length));
+  if(hasData && !confirm("¿Iniciar un nuevo prospecto? Se limpiarán las respuestas y los datos del cliente actual.")) return;
   step=0; answers=Array(questions.length).fill(null); lastRanked=null;
-  clearProfile(); // los datos de contacto se conservan
-  render();
+  clearProfile(); clearLead();
+  closeDrawer(); render();
+  window.scrollTo({top:0, behavior:"smooth"});
 }
 
 document.getElementById("openDrawerBtn").onclick = openDrawer;
+document.getElementById("newProspectBtn").onclick = newProspect;
 document.getElementById("drawerBackdrop").onclick = closeDrawer;
 document.getElementById("editFromBanner").onclick = editAnswers;
 
@@ -1235,6 +1352,7 @@ document.getElementById("editFromBanner").onclick = editAnswers;
     lastRanked = rankCatalog();
     if(loadLead()){
       showResults(lastRanked, {noScroll:true});
+      document.getElementById("resumeText").textContent = `Retomando la sesión de ${loadLead().fullName}.`;
       document.getElementById("resumeBanner").style.display="flex";
     } else {
       showGate(lastRanked, {noScroll:true});
